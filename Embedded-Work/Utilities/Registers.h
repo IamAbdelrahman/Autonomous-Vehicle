@@ -1,8 +1,8 @@
 /*
  * Registers.h
  *
- *  Created on: Oct 10, 2022
- *      Author: ak
+ *  Created on: Feb 12, 2023
+ *      Author: ak - os
  */
 
 #ifndef REGISTERS_H_
@@ -28,21 +28,21 @@
 
 /* PORT C Registers */
 
-#define PORTC *((vuint8_t*)0x35)	//8-bit register
-#define DDRC *((vuint8_t*)0x34)	//8-bit register
-#define PINC *((vuint8_t*)0x33)	//8-bit register
+#define PORTC *((vuint8_t*)0x35)	
+#define DDRC *((vuint8_t*)0x34)	
+#define PINC *((vuint8_t*)0x33)
 
 /* PORT D Registers */
 
-#define PORTD *((vuint8_t*)0x32)	//8-bit register
-#define DDRD *((vuint8_t*)0x31)	//8-bit register
-#define PIND *((vuint8_t*)0x30)	//8-bit register
+#define PORTD *((vuint8_t*)0x32)	
+#define DDRD *((vuint8_t*)0x31)	
+#define PIND *((vuint8_t*)0x30)	
 
 /* Timer Registers */
 
-#define TCCR0 *((vuint8_t*)0x53)	//8-bit register
-#define TCNT0 *((vuint8_t*)0x52)	//8-bit register
-#define TIFR *((vuint8_t*)0x58)	//8-bit register
+#define TCCR0 *((vuint8_t*)0x53)	
+#define TCNT0 *((vuint8_t*)0x52)	
+#define TIFR *((vuint8_t*)0x58)	
 
 
 #endif /* REGISTERS_H_ */

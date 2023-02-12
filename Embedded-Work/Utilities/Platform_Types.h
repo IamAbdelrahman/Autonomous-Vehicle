@@ -1,8 +1,8 @@
 /*
- * Platforms_types.h
+ * Platfrom_Types.h
  *
- *  Created on: Dec 12, 2022
- *  Author: Abdelrhaman Kamal
+ *  Created on: Feb 12, 2023
+ *      Author: ak - os
  */
 
 #ifndef PLATFORMS_TYPES_H_
