@@ -1,4 +1,4 @@
-#include "GPIO.h"
+#include "DIO_H"
 
 void DIO_init (uint8_t portName, uint8_t pinNumber, uint8_t direction) 
 {

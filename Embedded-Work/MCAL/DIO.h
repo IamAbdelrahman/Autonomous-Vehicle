@@ -5,8 +5,8 @@
  * Created on February 12, 2023, 12:16 AM
  */
 
-#ifndef GPIO_H
-#define	GPIO_H
+#ifndef DIO_H
+#define	DIO_H
 #include "Registers.h"
 #include "Platform_Types.h"
 
@@ -83,5 +83,5 @@ void DIO_toggle (uint8_t portName, uint8_t pinNumber);
 ***************************DIO_read**********************************/
 void DIO_read (uint8_t portName, uint8_t pinNumber, uint8_t* value); 
 
-#endif	/* GPIO_H */
+#endif	/* DIO_H */
 
