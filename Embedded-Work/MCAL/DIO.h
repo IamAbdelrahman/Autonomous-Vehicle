@@ -44,9 +44,11 @@ typedef union{
  *
  * Inputs: (portName): This is a character. It must be one of 
  * these characters 'A', 'B', 'C', and 'D' as they represent the
- * name of the ports of the microcontroller.
+ * name of the ports of the microcontroller. 
+ 
  *(pinNumber): It represents the pin number of each port
  * and takes a number from 0 : 7.
+ 
  * (pinDirection): It represents the state of the pin
  * whether it's OUT or IN and you can use numbers 0 or 1
  * otherwise you can use the macro directly for well-readability
@@ -54,7 +56,8 @@ typedef union{
  * Return: Void
  ***************************DIO_Init_Pin**********************************/
 void DIO_Init_Pin (uint8_t portName, uint8_t pinNumber, uint8_t pinDirection);	
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Write_Pin**********************************
  * This function is used to pull each pin high or low of the port registers
@@ -74,7 +77,8 @@ void DIO_Init_Pin (uint8_t portName, uint8_t pinNumber, uint8_t pinDirection);
  * Return: Void
 ***************************DIO_Write_Pin**********************************/
 void DIO_Write_Pin (uint8_t portName, uint8_t pinNumber, uint8_t pinValue); 
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Toggle_Pin**********************************
  * This function is used to toggle each pin from high to low and vice versa
@@ -90,7 +94,8 @@ void DIO_Write_Pin (uint8_t portName, uint8_t pinNumber, uint8_t pinValue);
  * Return: Void
 ***************************DIO_Toggle_Pin**********************************/
 void DIO_Toggle_Pin (uint8_t portName, uint8_t pinNumber); 
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Read_Pin**********************************
  * This function is used to know the status of each pin high or low of the 
@@ -109,7 +114,8 @@ void DIO_Toggle_Pin (uint8_t portName, uint8_t pinNumber);
  * Return: Void
 ***************************DIO_Read_Pin**********************************/
 void DIO_Read_Pin (uint8_t portName, uint8_t pinNumber, uint8_t* pinValue); 
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Port_Init**********************************
  * This function initializes the entire ddrx registers
@@ -129,7 +135,8 @@ void DIO_Read_Pin (uint8_t portName, uint8_t pinNumber, uint8_t* pinValue);
  * Return: Void
 ***************************DIO_Port_Init**********************************/
 void DIO_Port_Init (UGPIO_t* pGPIO, uint8_t portDirection);
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Port_Write**********************************
  * This function writes on the entire port registers
@@ -150,7 +157,8 @@ void DIO_Port_Init (UGPIO_t* pGPIO, uint8_t portDirection);
  * Return: Void
 ***************************DIO_Port_Write**********************************/
 void DIO_Port_Write (UGPIO_t* pGPIO, uint8_t portValue);
-
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 /***************************DIO_Port_Read**********************************
  * This function reads from the entire pinx registers
@@ -168,5 +176,7 @@ void DIO_Port_Write (UGPIO_t* pGPIO, uint8_t portValue);
  * Return: Void
 ***************************DIO_Port_Read**********************************/
 void DIO_Port_Read (uint8_t portName, uint8_t* portValue);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 #endif	/* DIO_H */
 
