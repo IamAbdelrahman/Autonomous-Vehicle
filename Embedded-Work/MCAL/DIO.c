@@ -156,22 +156,22 @@ void DIO_Read_Pin(uint8_t portName, uint8_t pinNumber, uint8_t* pinValue) {
     }
 }
 
-void DIO_Port_Direction(UGPIO_t* Ptr, uint8_t portDirection) {
+void DIO_Port_Direction(UGPIO_t* pGPIO, uint8_t portDirection) {
     
     if (portDirection == OUT)
-        Ptr-> All_Bits = 0xFF;
+        pGPIO-> All_Bits = 0xFF;
 
     else if (portDirection == IN)
-        Ptr-> All_Bits = 0x00;
+        pGPIO-> All_Bits = 0x00;
 }
 
-void DIO_Port_Write(UGPIO_t* Ptr, uint8_t portValue) {
+void DIO_Port_Write(UGPIO_t* pGPIO, uint8_t portValue) {
     
     if (portValue == LOW)
-        Ptr-> All_Bits = 0x00;
+        pGPIO-> All_Bits = 0x00;
 
     else if (portValue == HIGH)
-        Ptr-> All_Bits = 0xFF;
+        pGPIO-> All_Bits = 0xFF;
 }
 
 void DIO_Port_Read(uint8_t portName, uint8_t* portValue) {
