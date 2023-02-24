@@ -270,7 +270,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -318,7 +318,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -463,7 +463,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -611,17 +611,16 @@ void delay_s (uint64_t Time_delay_s)
 void PWM_Start(uint8_t dutyCycle)
 {   
     TIM2_Init();
-    TIM2_Start();
     
-	if((dutyCycle <= 100) && (dutyCycle > 0))
+    if((dutyCycle <= 100) && (dutyCycle > 0))
 	{
+		TIM2_Start();
 		OCR2 = (dutyCycle * 256)/100 - 1;
+		TIM2_Stop();
 	}
         
-	else if(dutyCycle == 0)
+    else if(dutyCycle == 0)
 	{
 		OCR2 = 0;
 	}
-    
-    TIM2_Stop();
 }
