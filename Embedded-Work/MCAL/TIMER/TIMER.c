@@ -8,6 +8,13 @@
 #include "TIMER.h"
 #include "math.h"
 
+// Global Structures and Pointers
+ST_TIMER_config_t S_TIMER0 = {TIMER0, NORMAL_MODE, CLK_1024_PRESCALING};
+ST_TIMER_config_t S_TIMER2 = {TIMER2, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESCALING};
+
+volatile U_TCCR0_t* pTCCR0 = ADDRESS_TCCR0;
+volatile U_TCCR2_t* pTCCR2 = ADDRESS_TCCR2;
+
 void TIMER_Init(ST_TIMER_config_t* pTIMER)
 {   
 	if (pTIMER->Timer_Channel == TIMER0)
@@ -270,7 +277,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                	pTCCR2->Timer2.CS21 = 0;
+                pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -318,7 +325,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                	pTCCR2->Timer2.CS21 = 0;
+                pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -463,7 +470,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                	pTCCR2->Timer2.CS21 = 0;
+                pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -501,13 +508,11 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 
 void TIM0_Init (void)
 {
-    ST_TIMER_config_t S_TIMER0 = {TIMER0, NORMAL_MODE, CLK_1024_PRESCALING};
     TIMER_Init (&S_TIMER0);
 }
 
 void TIM2_Init(void)
 {
-    ST_TIMER_config_t S_TIMER2 = {TIMER2, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESCALING};
     TIMER_Init (&S_TIMER2);
 }
  
@@ -539,14 +544,12 @@ void TIMER_Stop (ST_TIMER_config_t* pTIMER){
 }
 
 void TIM0_Stop (void)
-{
-    ST_TIMER_config_t S_TIMER0 = {TIMER0, NORMAL_MODE, CLK_1024_PRESCALING};
+{   
     TIMER_Stop (&S_TIMER0);
 }
 
 void TIM2_Stop (void)
 {
-    ST_TIMER_config_t S_TIMER2 = {TIMER2, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESCALING};
     TIMER_Stop (&S_TIMER2);
 }
 
@@ -610,17 +613,18 @@ void delay_s (uint64_t Time_delay_s)
 
 void PWM_Start(uint8_t dutyCycle)
 {   
-    TIM2_Init();
+   TIM2_Init();
+   TIM2_Start();
     
-    if((dutyCycle <= 100) && (dutyCycle > 0))
+	if((dutyCycle <= 100) && (dutyCycle > 0))
 	{
-		TIM2_Start();
 		OCR2 = (dutyCycle * 256)/100 - 1;
-		TIM2_Stop();
 	}
         
-    else if(dutyCycle == 0)
+	else if(dutyCycle == 0)
 	{
 		OCR2 = 0;
 	}
+    
+    TIM2_Stop();
 }

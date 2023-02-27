@@ -7,8 +7,9 @@
 
 #ifndef MCAL_TIMER_TIMER_H_
 #define MCAL_TIMER_TIMER_H_
-#include "Platform_Types.h"
-#include "Registers.h"
+
+#include "../Utilities/Registers.h"
+#include "../Utilities/Platform_Types.h"
 
 #define F_CPU   16000000
 #define T_TICK  (1024.0 / F_CPU)
@@ -90,8 +91,7 @@ typedef struct{
 
 #define ADDRESS_TCCR0   (U_TCCR0_t*)(TCCR0)
 #define ADDRESS_TCCR2   (U_TCCR2_t*)(TCCR2)
-volatile U_TCCR0_t* pTCCR0 = ADDRESS_TCCR0;
-volatile U_TCCR2_t* pTCCR2 = ADDRESS_TCCR2;
+
 /***************************TIMER_Init**********************************
  * This function initializes the Timer register by configuring it
  * through its channel, mode and the pre-scaler too.

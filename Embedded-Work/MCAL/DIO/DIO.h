@@ -11,12 +11,6 @@
 #include "Registers.h"
 #include "Platform_Types.h"
 
-#define IN 0
-#define OUT 1
-
-#define HIGH 1
-#define LOW 0
-
 typedef struct{
    
         vuint8_t pin0 : 1;
@@ -36,7 +30,23 @@ typedef union{
         SGPIO_t PORTS;
         
     }UGPIO_t;
-    
+ 
+#define ADDRESS_PORTA   (UGPIO_t*)PORT_A
+#define ADDRESS_DDRA    (UGPIO_t*)DDR_A
+#define ADDRESS_PINA    (UGPIO_t*)PIN_A
+
+#define ADDRESS_PORTB   (UGPIO_t*)PORT_B
+#define ADDRESS_DDRB    (UGPIO_t*)DDR_B
+#define ADDRESS_PINB   (UGPIO_t*)PIN_B
+
+#define ADDRESS_PORTC   (UGPIO_t*)PORT_C
+#define ADDRESS_DDRC   (UGPIO_t*)DDR_C
+#define ADDRESS_PINC   (UGPIO_t*)PIN_C
+
+#define ADDRESS_PORTD   ((UGPIO_t*)PORT_D)
+#define ADDRESS_DDRD   (UGPIO_t*)DDR_D
+#define ADDRESS_PIND   (UGPIO_t*)PIN_D
+
     
 /***************************DIO_Init_Pin**********************************
  * This function initialize the pins of the port registers
@@ -134,7 +144,7 @@ ________________________________________________________________________________
  * 
  * Return: Void
 ***************************DIO_Port_Init**********************************/
-void DIO_Port_Init (UGPIO_t* pGPIO, uint8_t portDirection);
+extern void DIO_Port_Init (UGPIO_t* pGPIO, uint8_t portDirection);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
@@ -178,5 +188,10 @@ ________________________________________________________________________________
 void DIO_Port_Read (uint8_t portName, uint8_t* portValue);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
+
+void DDRB_Out(void);
+void DDRB_Low(void);
+void PORTB_High(void);
+void PORTB_Low(void);
 #endif	/* DIO_H */
 

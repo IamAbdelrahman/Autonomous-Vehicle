@@ -156,7 +156,7 @@ void DIO_Read_Pin(uint8_t portName, uint8_t pinNumber, uint8_t* pinValue) {
     }
 }
 
-void DIO_Port_Direction(UGPIO_t* pGPIO, uint8_t portDirection) {
+extern void DIO_Port_Init(UGPIO_t* pGPIO, uint8_t portDirection) {
     
     if (portDirection == OUT)
         pGPIO-> All_Bits = 0xFF;
@@ -203,3 +203,22 @@ void DIO_Port_Read(uint8_t portName, uint8_t* portValue) {
     }
 }
 
+void DDRB_Out(void)
+{
+    DIO_Port_Init(ADDRESS_DDRB, OUT);
+}
+
+void DDRB_Low(void)
+{
+    DIO_Port_Init(ADDRESS_DDRB, IN);
+}
+
+void PORTB_High(void)
+{
+    DIO_Port_Write(ADDRESS_PORTB, HIGH);
+}
+
+void PORTB_Low(void)
+{
+    DIO_Port_Write(ADDRESS_PORTB, LOW);
+}
