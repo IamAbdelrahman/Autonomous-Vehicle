@@ -1,9 +1,11 @@
 #include "MOTOR.h"
+
 UGPIO_t* pGPIO = ADDRESS_PORTB;
 void MOTOR_Init (void)
 {   
     DDRB_Out();
-    PWM_Start (254);
+    TIM0_Init();
+    PWM_Start (50);
 }
 
 void MOTOR_Clkwise (void)

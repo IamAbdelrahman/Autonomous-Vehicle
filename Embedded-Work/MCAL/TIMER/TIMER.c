@@ -9,8 +9,8 @@
 #include "math.h"
 
 // Global Structures and Pointers
-ST_TIMER_config_t S_TIMER0 = {TIMER0, NORMAL_MODE, CLK_1024_PRESCALING};
-ST_TIMER_config_t S_TIMER2 = {TIMER2, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESCALING};
+ST_TIMER_config_t S_TIMER0 = {TIMER0, PWM_MODE_FAST_NON_INVERTED, CLK_NO_PRESCALING};
+ST_TIMER_config_t S_TIMER2 = {TIMER2, PWM_MODE_FAST_NON_INVERTED, CLK_NO_PRESCALING};
 
 volatile U_TCCR0_t* pTCCR0 = ADDRESS_TCCR0;
 volatile U_TCCR2_t* pTCCR2 = ADDRESS_TCCR2;
@@ -20,10 +20,9 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 	if (pTIMER->Timer_Channel == TIMER0)
     {    
         if (pTIMER->Timer_Mode == NORMAL_MODE)
-        {
-            
-           		 pTCCR0->Timer0.WGM00 = 0;
-            	 pTCCR0->Timer0.WGM01 = 0;
+        {    
+            pTCCR0->Timer0.WGM00 = 0;
+            pTCCR0->Timer0.WGM01 = 0;
             
 		    if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
 		        pTCCR0->All_Bits = 0x00;
@@ -265,14 +264,13 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
     
     else if (pTIMER->Timer_Channel == TIMER2)
     {       
-            if (pTIMER->Timer_Mode == NORMAL_MODE)
-            {
-            
-           		pTCCR2->Timer2.WGM20 = 0;
-            	pTCCR2->Timer2.WGM21 = 0;
+        if (pTIMER->Timer_Mode == NORMAL_MODE)
+        {        
+       		pTCCR2->Timer2.WGM20 = 0;
+            pTCCR2->Timer2.WGM21 = 0;
             
 		    if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
-		        pTCCR2->All_Bits = 0x00;
+                pTCCR2->All_Bits = 0x00;
 		    
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
@@ -325,7 +323,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -422,7 +420,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -470,7 +468,7 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER)
 		    else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING)
             {
 		        pTCCR2->Timer2.CS20 = 1;
-                pTCCR2->Timer2.CS21 = 0;
+                	pTCCR2->Timer2.CS21 = 0;
 		        pTCCR2->Timer2.CS22 = 0;
             }                              
 		
@@ -553,7 +551,7 @@ void TIM2_Stop (void)
     TIMER_Stop (&S_TIMER2);
 }
 
-void delay_s (uint64_t Time_delay_s)
+void delay_s (float Time_delay_s)
 {  
     TIM0_Init();
     uint32_t Number_of_Overflow = 0;
@@ -612,19 +610,15 @@ void delay_s (uint64_t Time_delay_s)
 }
 
 void PWM_Start(uint8_t dutyCycle)
-{   
-   TIM2_Init();
-   TIM2_Start();
-    
+{     
 	if((dutyCycle <= 100) && (dutyCycle > 0))
 	{
-		OCR2 = (dutyCycle * 256)/100 - 1;
+		OCR0 = (dutyCycle * 256)/100 - 1;
 	}
         
 	else if(dutyCycle == 0)
 	{
-		OCR2 = 0;
+		OCR0 = 0;
 	}
-    
-    TIM2_Stop();
 }
+
