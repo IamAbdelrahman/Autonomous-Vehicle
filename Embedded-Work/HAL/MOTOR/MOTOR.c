@@ -10,8 +10,8 @@ void MOTOR_Init (void)
 
 void MOTOR_Clkwise (void)
 {   
-    pGPIO->PORTS.pin0 = 0;
-    pGPIO->PORTS.pin1 = 1;
+    pGPIO->PORTS.pin0 = 1;
+    pGPIO->PORTS.pin1 = 0;
 }
 
 void MOTOR_Stop (void)
