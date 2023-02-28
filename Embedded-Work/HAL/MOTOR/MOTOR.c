@@ -6,6 +6,10 @@ void MOTOR_Init (void)
     DDRB_Out();
     TIM0_Init();
     PWM_Start (50);
+    pGPIO->PORTS.pin0 = 0;
+    pGPIO->PORTS.pin1 = 0;
+    pGPIO->PORTS.pin5 = 0;
+    pGPIO->PORTS.pin6 = 0;    
 }
 
 void MOTOR_Clkwise (void)
@@ -16,7 +20,10 @@ void MOTOR_Clkwise (void)
 
 void MOTOR_Stop (void)
 {
-    PORTB_Low();
+    pGPIO->PORTS.pin0 = 0;
+    pGPIO->PORTS.pin1 = 0;
+    pGPIO->PORTS.pin5 = 0;
+    pGPIO->PORTS.pin6 = 0;  
 }
 
 void MOTOR_Anticlkwise (void)
