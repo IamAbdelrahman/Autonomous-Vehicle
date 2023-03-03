@@ -59,7 +59,7 @@
 // TIMER0 - Registers
 #define TCCR0       0x53	
 #define TCNT0       *((vuint8_t*)0x52)	
-#define TIFR        *((vuint8_t*)0x58)
+#define TIFR        0x58
 #define OCR0        *((vuint8_t*)0x5C)
 
 #define TIMSK       0x59
