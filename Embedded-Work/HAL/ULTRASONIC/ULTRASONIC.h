@@ -10,8 +10,9 @@
 #include "DIO.h"
 #include "TIMER.h"
 
-void TRIG_Init(uint8_t portName, uint8_t pinNumber);
-void ECHO_Init(uint8_t portName, uint8_t pinNumber);
+void Ultra_Trig_Init(uint8_t portName, uint8_t pinNumber);
+void Ultra_Echo_Init(uint8_t portName, uint8_t pinNumber);
+void Ultra_Init(void);
 
 
 
