@@ -9,31 +9,31 @@
 #define REGISTERS_H_
 #include "Platform_Types.h"
 
-#define F_CPU   16000000
-#define SET_BIT(X, BIT_NO)   (X |= (1 << BIT_NO))
-#define CLR_BIT(X, BIT_NO)  (X &= ~(1 << BIT_NO))
+#define F_CPU                   16000000
+#define SET_BIT(X, BIT_NO)      (X |= (1 << BIT_NO))
+#define CLR_BIT(X, BIT_NO)      (X &= ~(1 << BIT_NO))
 #define TOGGLE_BIT(X, BIT_NO)   (X ^= (1 << BIT_NO))
-#define READ_BIT(X, BIT_NO) ((X & (1 << BIT_NO) >> BIT_NO))
+#define READ_BIT(X, BIT_NO)     ((X & (1 << BIT_NO) >> BIT_NO))
 
 /* PORT A Registers */
-#define PORTA *((vuint8_t*)0x3B)	
-#define DDRA *((vuint8_t*)0x3A)	
-#define PINA *((vuint8_t*)0x39)	
+#define PORTA   *((vuint8_t*)0x3B)	
+#define DDRA    *((vuint8_t*)0x3A)	
+#define PINA    *((vuint8_t*)0x39)	
 
 /* PORT B Registers */
-#define PORTB *((vuint8_t*)0x38)	
-#define DDRB *((vuint8_t*)0x37)	
-#define PINB *((vuint8_t*)0x36)	
+#define PORTB   *((vuint8_t*)0x38)	
+#define DDRB    *((vuint8_t*)0x37)	
+#define PINB    *((vuint8_t*)0x36)	
 
 /* PORT C Registers */
-#define PORTC *((vuint8_t*)0x35)	
-#define DDRC *((vuint8_t*)0x34)	
-#define PINC *((vuint8_t*)0x33)	
+#define PORTC   *((vuint8_t*)0x35)	
+#define DDRC    *((vuint8_t*)0x34)	
+#define PINC    *((vuint8_t*)0x33)	
 
 /* PORT D Registers */
-#define PORTD *((vuint8_t*)0x32)	
-#define DDRD *((vuint8_t*)0x31)	
-#define PIND *((vuint8_t*)0x30)	
+#define PORTD   *((vuint8_t*)0x32)	
+#define DDRD    *((vuint8_t*)0x31)	
+#define PIND    *((vuint8_t*)0x30)	
 
 /*
  * Another approach (method) to access the registers by using
@@ -75,6 +75,8 @@
 #define OCR1BL      *((vuint8_t*)0x48)
 #define ICR1H       *((vuint8_t*)0x47)
 #define ICR1L       *((vuint8_t*)0x46)
+#define TCCR1A_R    *((vuint8_t*)0x4F)
+#define TCCR1B_R    *((vuint8_t*)0x4E)
 
 // TIMER2 - Registers
 #define TCCR2       0x45

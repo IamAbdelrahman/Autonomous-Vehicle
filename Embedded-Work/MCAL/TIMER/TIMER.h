@@ -7,22 +7,21 @@
 
 #ifndef MCAL_TIMER_TIMER_H_
 #define MCAL_TIMER_TIMER_H_
+#include "DIO.h"
 
-#include "../Utilities/Registers.h"
-#include "../Utilities/Platform_Types.h"
-
-#define F_CPU   16000000
 #define T_TICK  (1024.0 / F_CPU)
-#define T_MAX_DELAY  (256 * T_TICK)
+#define T_MAX_DELAY  (256.0 * T_TICK)
+
+// Timer Channels
+#define TIMER0  0
+#define TIMER1  1
+#define TIMER2  2
 
 
 // Timers Overflow Values
 #define TIMER0_OVERFLOW 256
+#define TIMER1_OVERFLOW 65536
 #define TIMER2_OVERFLOW 256
-
-// Timer Channels
-#define TIMER0  0
-#define TIMER2  2
 
 // Timer Modes
 #define NORMAL_MODE                         0
@@ -31,7 +30,7 @@
 #define PWM_MODE_PHASE_CORRECT_NON_INVERTED 3
 #define PWM_MODE_PHASE_CORRECT_INVERTED     4
 
-// TIMER0 & TIMER2 - PRESCALER
+// TIMER0 & TIMER1 & TIMER2 - PRESCALER
 #define NO_CLK_SRC               0
 #define CLK_NO_PRESCALING        1
 #define CLK_8_PRESCALING         2
@@ -41,7 +40,7 @@
 #define EX_CLK_SRC_FALLING_EDGE  6
 #define EX_CLK_SRC_RISING_EDGE   7
 
-typedef struct {
+typedef struct{
     
     vuint8_t CS00 : 1;
     vuint8_t CS01 : 1;
@@ -54,7 +53,54 @@ typedef struct {
     
 }ST_TCCR0_t;
 
-typedef struct {
+typedef union {
+        
+    vuint8_t All_Bits;
+    ST_TCCR0_t Timer0;  
+    
+}U_TCCR0_t;
+
+typedef struct{
+    
+    vuint8_t WGM10  : 1;
+    vuint8_t WGM11  : 1;
+    vuint8_t FOC1B  : 1;
+    vuint8_t FOC1A  : 1;
+    vuint8_t COM1B0 : 1;
+    vuint8_t COM1B1 : 1;
+    vuint8_t COM1A0 : 1;
+    vuint8_t COM1A1 : 1;
+    
+}ST_TCCR1A_t;
+
+typedef union{
+    
+    vuint8_t All_Bits;
+    ST_TCCR1A_t Timer1A;
+    
+}U_TCCR1A_t;
+
+typedef struct{
+    
+    vuint8_t CS10       : 1;
+    vuint8_t CS11       : 1;
+    vuint8_t CS12       : 1;
+    vuint8_t WGM12      : 1;
+    vuint8_t WGM13      : 1;
+    vuint8_t reserved   : 1;
+    vuint8_t ICES1      : 1;
+    vuint8_t ICNC1      : 1;
+    
+}ST_TCCR1B_t;
+
+typedef union{
+    
+    vuint8_t All_Bits;
+    ST_TCCR1B_t Timer1B;
+    
+}U_TCCR1B_t;
+
+typedef struct{
     
     vuint8_t CS20 : 1;
     vuint8_t CS21 : 1;
@@ -67,13 +113,6 @@ typedef struct {
     
 }ST_TCCR2_t;
 
-typedef union {
-        
-    vuint8_t All_Bits;
-    ST_TCCR0_t Timer0;  
-    
-}U_TCCR0_t;
-
 typedef union{
     
     vuint8_t All_Bits;
@@ -83,14 +122,58 @@ typedef union{
 
 typedef struct{
     
+    vuint8_t TOV0 : 1;
+    vuint8_t OCF0 : 1;
+    vuint8_t TOV1 : 1;
+    vuint8_t OCF1B: 1;
+    vuint8_t OCF1A: 1;
+    vuint8_t ICF1 : 1;
+    vuint8_t TOV2 : 1;
+    vuint8_t OCF2 : 1;
+    
+}ST_TIFR_t;
+
+typedef union{
+    
+    vuint8_t All_Bits;
+    ST_TIFR_t TIFR_Reg;
+    
+}U_TIFR_t;
+
+typedef struct{
+    
+    vuint8_t TOIE0 : 1;
+    vuint8_t OCIE0 : 1;
+    vuint8_t TOIE1 : 1;
+    vuint8_t OCIE1B: 1;
+    vuint8_t OCIE1A: 1;
+    vuint8_t TICIE1: 1;
+    vuint8_t TOIE2 : 1;
+    vuint8_t OCIE2 : 1;
+    
+}ST_TIMSK_t;
+
+typedef union{
+    
+    vuint8_t All_Bits;
+    ST_TIMSK_t TIMSK_Reg;
+    
+}U_TIMSK_t;
+
+typedef struct{
+    
     vuint8_t Timer_Channel;
     vuint8_t Timer_Mode;
     vuint8_t Timer_Start_Prescalar;
     
 }ST_TIMER_config_t;
 
-#define ADDRESS_TCCR0   (U_TCCR0_t*)(TCCR0)
-#define ADDRESS_TCCR2   (U_TCCR2_t*)(TCCR2)
+#define ADDRESS_TCCR0    (U_TCCR0_t*)(TCCR0)
+#define ADDRESS_TCCR2    (U_TCCR2_t*)(TCCR2)
+#define ADDRESS_TCCR1A   (U_TCCR1A_t*)(TCCR1A)
+#define ADDRESS_TCCR1B   (U_TCCR1B_t*)(TCCR1B)
+#define ADDRESS_TIFR     (U_TIFR_t*)(TIFR)
+#define ADDRESS_TIMSK    (U_TIMSK_t*)(TIMSK)
 
 /***************************TIMER_Init**********************************
  * This function initializes the Timer register by configuring it
@@ -136,6 +219,7 @@ void TIM2_Init(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
+void TIM1_Init(void);
 /***************************TIM0_Start**********************************
  * This function starts the Timer/Count0 register by assigning an initial
  * value to the TCNT0 and this value is 0
@@ -157,6 +241,7 @@ ________________________________________________________________________________
  * Return: Void
  ***************************TIM2_Start**********************************/
 void TIM2_Start(void);
+void TIM1_Start(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
@@ -199,6 +284,7 @@ ________________________________________________________________________________
  * Return: Void
  ***************************TIM2_Stop**********************************/
 void TIM2_Stop(void);
+void TIM1_Stop(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
@@ -211,7 +297,7 @@ ________________________________________________________________________________
  * 
  * Return: Void
  ***************************delay_s**********************************/
-void delay_s(uint64_t Time_delay_s);
+void delay_s(float Time_delay_s);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
@@ -227,7 +313,17 @@ void PWM_Start(uint8_t dutyCycle);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
-void TIMER_checkStatus(uint8_t *status);
+/***************************PWM_Start**********************************
+ * This function is used to get the status of any timer and store it
+ * in a status variable
+ *
+ * Inputs: It takes pointer to unsigned character to store the status in
+ * 
+ * Return: Void
+ ***************************PWM_Start**********************************/
+void TIMER_checkStatus(ST_TIMER_config_t* pTIMER, uint8_t *status);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
 #endif /* MCAL_TIMER_TIMER_H_ */
 
