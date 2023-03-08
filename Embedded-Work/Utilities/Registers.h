@@ -9,7 +9,7 @@
 #define REGISTERS_H_
 #include "Platform_Types.h"
 
-#define F_CPU                   16000000
+#define F_CPU  16000000UL
 #define SET_BIT(X, BIT_NO)      (X |= (1 << BIT_NO))
 #define CLR_BIT(X, BIT_NO)      (X &= ~(1 << BIT_NO))
 #define TOGGLE_BIT(X, BIT_NO)   (X ^= (1 << BIT_NO))
@@ -62,8 +62,6 @@
 #define TIFR        0x58
 #define OCR0        *((vuint8_t*)0x5C)
 
-#define TIMSK       0x59
-
 // TIMER1 - Registers
 #define TCCR1A      0x4F
 #define TCCR1B      0x4E
@@ -82,6 +80,16 @@
 #define TCCR2       0x45
 #define TCNT2       *((vuint8_t*)0x44)	
 #define OCR2        *((vuint8_t*)0x43)
+
+// SFIOR - Register
+#define SFIOR   *((vuint8_t*)0x50)
+#define PSR10   0
+#define PSR2    1
+#define PUD     2
+#define ACME    3
+#define ADTS0   5
+#define ADTS1   6
+#define ADTS2   7
 
 #define IN 0
 #define OUT 1

@@ -142,26 +142,6 @@ typedef union{
 
 typedef struct{
     
-    vuint8_t TOIE0 : 1;
-    vuint8_t OCIE0 : 1;
-    vuint8_t TOIE1 : 1;
-    vuint8_t OCIE1B: 1;
-    vuint8_t OCIE1A: 1;
-    vuint8_t TICIE1: 1;
-    vuint8_t TOIE2 : 1;
-    vuint8_t OCIE2 : 1;
-    
-}ST_TIMSK_t;
-
-typedef union{
-    
-    vuint8_t All_Bits;
-    ST_TIMSK_t TIMSK_Reg;
-    
-}U_TIMSK_t;
-
-typedef struct{
-    
     vuint8_t Timer_Channel;
     vuint8_t Timer_Mode;
     vuint8_t Timer_Start_Prescalar;
@@ -173,7 +153,6 @@ typedef struct{
 #define ADDRESS_TCCR1A   (U_TCCR1A_t*)(TCCR1A)
 #define ADDRESS_TCCR1B   (U_TCCR1B_t*)(TCCR1B)
 #define ADDRESS_TIFR     (U_TIFR_t*)(TIFR)
-#define ADDRESS_TIMSK    (U_TIMSK_t*)(TIMSK)
 
 /***************************TIMER_Init**********************************
  * This function initializes the Timer register by configuring it
@@ -186,40 +165,12 @@ typedef struct{
  * Return: Void
  ***************************TIMER_Init**********************************/
 void TIMER_Init(ST_TIMER_config_t* pTIMER);	
-/*________________________________________________________________________________
-________________________________________________________________________________*/
-
-/***************************TIM0_Init**********************************
- * This function initializes the Timer0 register TCCR0 by configuring it
- * through its channel, mode and the pre-scaler too and this is done by
- * calling the function TIMER_Init() inside it. And so the channel will be
- * TIMER0, and the mode will be NORMAL_MODE, and finally the pre-scaler will
- * be 1024 always
- *
- * Inputs: It takes nothing
- * 
- * Return: Void
- ***************************TIM0_Init**********************************/
 void TIM0_Init (void);
-/*________________________________________________________________________________
-________________________________________________________________________________*/
-
-/***************************TIM2_PWM_Init**********************************
- * This function initializes the Timer2 register TCCR2 by configuring it
- * through its channel, mode and the pre-scaler too and this is done by
- * calling the function TIMER_Init() inside it. And so the channel will be
- * TIMER2, and the mode will be PWM_PHASE_CORRECT_NON_INVERTED
- * and finally the pre-scaler will be 1024 always.
- *
- * Inputs: It takes nothing
- * 
- * Return: Void
- ***************************TIM2_PWM_Init**********************************/
+void TIM1_Init(void);
 void TIM2_Init(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
-void TIM1_Init(void);
 /***************************TIM0_Start**********************************
  * This function starts the Timer/Count0 register by assigning an initial
  * value to the TCNT0 and this value is 0
@@ -241,6 +192,17 @@ ________________________________________________________________________________
  * Return: Void
  ***************************TIM2_Start**********************************/
 void TIM2_Start(void);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
+
+/***************************TIM1_Start**********************************
+ * This function starts the Timer/Count1 register by assigning an initial
+ * value to the TCNT1L and TCNT1H by zero.
+ *
+ * Inputs: It takes nothing
+ * 
+ * Return: Void
+ ***************************TIM1_Start**********************************/
 void TIM1_Start(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
@@ -256,33 +218,7 @@ ________________________________________________________________________________
  * Return: Void
  ***************************TIMER_Stop**********************************/
 void TIMER_Stop (ST_TIMER_config_t* pTIMER);
-/*________________________________________________________________________________
-________________________________________________________________________________*/
-
-/***************************TIM0_Stop**********************************
- * This function is used to stop the Timer0 (TCCR0) registers, by 
- * initializing a structure of timer configuration and then calling
- * the Timer_Stop() function and passing the address of that structure
- * to it
- *
- * Inputs: It takes nothing
- * 
- * Return: Void
- ***************************TIM0_Stop**********************************/
 void TIM0_Stop (void);
-/*________________________________________________________________________________
-________________________________________________________________________________*/
-
-/***************************TIM2_Stop**********************************
- * This function is used to stop the Timer0 (TCCR2) registers, by 
- * initializing a structure of timer configuration and then calling
- * the Timer_Stop() function and passing the address of that structure
- * to it
- *
- * Inputs: It takes nothing
- * 
- * Return: Void
- ***************************TIM2_Stop**********************************/
 void TIM2_Stop(void);
 void TIM1_Stop(void);
 /*________________________________________________________________________________
@@ -305,7 +241,8 @@ ________________________________________________________________________________
  * This function is used to generate PWM signals depending on the calculations
  * of FAST_PWM signals, then assign the result in the OCRn register
  *
- * Inputs: It takes the value of the duty cycle (0 : 255)
+ * Inputs: It takes the value of the duty cycle (0 : 100) hence the 
+ * overflow is 256
  * 
  * Return: Void
  ***************************PWM_Start**********************************/
@@ -313,15 +250,33 @@ void PWM_Start(uint8_t dutyCycle);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
-/***************************PWM_Start**********************************
+/***************************TIMER_checkStatus**********************************
  * This function is used to get the status of any timer and store it
  * in a status variable
  *
- * Inputs: It takes pointer to unsigned character to store the status in
+ * Inputs: It takes the pTIMER pointer to access the general Timer structures
+ * to get the Timer channel in order to get its status. It also takes a pointer 
+ * to unsigned character to store the status in
  * 
  * Return: Void
- ***************************PWM_Start**********************************/
+ ***************************TIMER_checkStatus**********************************/
 void TIMER_checkStatus(ST_TIMER_config_t* pTIMER, uint8_t *status);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
+
+/***************************TIMER_Reset**********************************
+ * This function is used to reset the Timer
+ *
+ * Inputs: It takes the pTIMER pointer to access the general Timer structures
+ * to get the Timer channel in order to reset it through start it from the 
+ * zero and set the timer overflow flag.
+ * 
+ * Return: Void
+ ***************************TIMER_Reset**********************************/
+void TIMER_Reset(ST_TIMER_config_t* pTIMER);
+void TIM0_Reset(void);
+void TIM1_Reset(void);
+void TIM2_Reset(void);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 

@@ -10,7 +10,7 @@
 
 #include "Registers.h"
 #include "Platform_Types.h"
-
+#include<avr/delay.h>
 typedef struct{
    
         vuint8_t pin0 : 1;
@@ -37,17 +37,16 @@ typedef union{
 
 #define ADDRESS_PORTB   (UGPIO_t*)PORT_B
 #define ADDRESS_DDRB    (UGPIO_t*)DDR_B
-#define ADDRESS_PINB   (UGPIO_t*)PIN_B
+#define ADDRESS_PINB    (UGPIO_t*)PIN_B
 
 #define ADDRESS_PORTC   (UGPIO_t*)PORT_C
-#define ADDRESS_DDRC   (UGPIO_t*)DDR_C
-#define ADDRESS_PINC   (UGPIO_t*)PIN_C
+#define ADDRESS_DDRC    (UGPIO_t*)DDR_C
+#define ADDRESS_PINC    (UGPIO_t*)PIN_C
 
-#define ADDRESS_PORTD   ((UGPIO_t*)PORT_D)
-#define ADDRESS_DDRD   (UGPIO_t*)DDR_D
-#define ADDRESS_PIND   (UGPIO_t*)PIN_D
-
-    
+#define ADDRESS_PORTD   (UGPIO_t*)PORT_D
+#define ADDRESS_DDRD    (UGPIO_t*)DDR_D
+#define ADDRESS_PIND    (UGPIO_t*)PIN_D
+   
 /***************************DIO_Init_Pin**********************************
  * This function initialize the pins of the port registers
  * through configuring the pin as an output pin or an input pin
