@@ -181,11 +181,13 @@ void MOTORS_Stop() {
 }
 
 void Move_Forward() {
-    MOTORS_Anticlkwise();
+    MOTORS_Right_Anticlkwise();
+    MOTORS_Left_Clkwise();
 }
 
 void Move_Backward() {
-    MOTORS_Clkwise();
+    MOTORS_Right_Clkwise();
+    MOTORS_Left_Anticlkwise();
 }
 
 void Move_Right() {
