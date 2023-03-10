@@ -139,6 +139,21 @@ void Move_Right(void);
 void Move_Left(void);
 /*_________________________________________________________________________*/
 
+/**********************MOTOR_Speed**********************************
+ * Description: This function is used to determine the speed that 
+ will be applied to the motors during the moving through changing
+ the dutyCyle of the pulse width modulated signal.
+ Another function is MOTOR_Variable_Speed() this function is used to 
+ change the speed of motors at run time by using a potentiometer connected
+ to the microcontroller
+ * 
+ * Input: It takes nothing like all the functions inside it
+ * Return: It returns void
+ **********************MOTOR_Speed***********************************/
 void MOTOR_Speed(void);
+void MOTOR_Variable_Speed()
+
+/*_________________________________________________________________________*/
+
 #endif	/* MOTOR_H */
 

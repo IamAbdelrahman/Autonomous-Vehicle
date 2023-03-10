@@ -98,25 +98,25 @@ void MOTORS_Clkwise() {
 void MOTOR1_Anticlkwise() {
     DIO_Write_Pin('B', 0, LOW);
     DIO_Write_Pin('B', 1, HIGH);
-    MOTOR_Speed();
+    
 }
 
 void MOTOR2_Anticlkwise() {
     DIO_Write_Pin('B', 2, LOW);
     DIO_Write_Pin('B', 4, HIGH);
-    MOTOR_Speed();
+    
 }
 
 void MOTOR3_Anticlkwise() {
     DIO_Write_Pin('C', 0, LOW);
     DIO_Write_Pin('C', 1, HIGH);
-    MOTOR_Speed();
+    
 }
 
 void MOTOR4_Anticlkwise() {
     DIO_Write_Pin('C', 2, LOW);
     DIO_Write_Pin('C', 3, HIGH);
-    MOTOR_Speed();
+    
 }
 
 void MOTORS_Left_Anticlkwise()
@@ -201,7 +201,10 @@ void Move_Left() {
 }
 
 void MOTOR_Speed() {
-    /* PWM_Start (50);  */ // Fixed Speed.
-    PWM_Start(ADC_Read()); // Variable Speed.
+    PWM_Start (50);
 
+}
+
+void MOTOR_Variable_Speed(){
+	PWM_Start(ADC_Read());
 }
