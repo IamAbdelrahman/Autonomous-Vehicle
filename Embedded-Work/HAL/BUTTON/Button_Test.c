@@ -7,18 +7,20 @@
 #include "LED.h"
 #include "ULTRASONIC.h"
 #include "MOTOR.h"
-#include "IR.h"
-
+#include "BUTTON.h"
 int main() {
-    uint8_t IR_state;
-    IR_init('B', 0);
+    uint8_t button_state;
+    BUTTON_Init('B', 0);
     LED_Init('C', 0);
     while (1) {
-        IR_read('B', 0, &IR_state);
-        if (IR_state == HIGH) {
+        BUTTON_Read('B', 0, &button_state);
+        if (button_state == HIGH) {
             LED_On('C', 0);
-        } else if (IR_state == LOW) {
+        } else if (button_state == LOW) {
             LED_Off('C', 0);
         }
     }
 }
+
+
+// avrdude -c usbasp -p m32 -u -U flash:w:Button_Test.hex

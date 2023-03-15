@@ -1,23 +1,23 @@
 #include "LED.h"
 
-void LED_init (uint8_t ledport, uint8_t ledpin)
+void LED_Init (uint8_t ledport, uint8_t ledpin)
 {
-	DIO_init(ledport, ledpin, OUT);
+	DIO_Init_Pin(ledport, ledpin, OUT);
 }
 
-void LED_on (uint8_t ledport, uint8_t ledpin)
+void LED_On (uint8_t ledport, uint8_t ledpin)
 {
-	DIO_write (ledport, ledpin, HIGH );
+	DIO_Write_Pin (ledport, ledpin, HIGH );
 }
 
-void LED_off (uint8_t ledport, uint8_t ledpin)
+void LED_Off (uint8_t ledport, uint8_t ledpin)
 {
-    DIO_write (ledport, ledpin, LOW);
+    DIO_Write_Pin (ledport, ledpin, LOW);
 }
 
-void LED_toggle (uint8_t ledport, uint8_t ledpin)
+void LED_Toggle (uint8_t ledport, uint8_t ledpin)
 {
-    DIO_toggle (ledport, ledpin);
+    DIO_Toggle_Pin (ledport, ledpin);
 }
 
 

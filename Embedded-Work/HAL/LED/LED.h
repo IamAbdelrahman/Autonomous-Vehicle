@@ -1,9 +1,9 @@
 #ifndef DIO_DRIVERS_ECUAL_LED_H_
 #define DIO_DRIVERS_ECUAL_LED_H_
 
-#include "../MCAL/DIO.h"	
+#include "DIO.h"	
 
-/***************************LED_init**********************************
+/***************************LED_Init**********************************
  * This function is used to initialize the status of the led connected to
  * any pin in any port register in the microcontroller. It must be an output
  * device by calling the function DIO_init() and passing a high value (1)
@@ -16,11 +16,11 @@
  * and takes a number from 0 : 7.
  * 
  * Return: Void
-***************************LED_init**********************************/
-void LED_init (uint8_t ledport, uint8_t ledpin); 
+***************************LED_Init**********************************/
+void LED_Init (uint8_t ledport, uint8_t ledpin); 
 
 
-/***************************LED_on**********************************
+/***************************LED_On**********************************
  * This function is used to turn on the the led connected to
  * any pin in any port register in the microcontroller through calling the
  * function DIO_write() and passing high value (1) to it.
@@ -32,10 +32,10 @@ void LED_init (uint8_t ledport, uint8_t ledpin);
  * and takes a number from 0 : 7.
  * 
  * Return: Void
-***************************LED_on**********************************/
-void LED_on (uint8_t ledport, uint8_t ledpin);
+***************************LED_On**********************************/
+void LED_On (uint8_t ledport, uint8_t ledpin);
 
-/***************************LED_off**********************************
+/***************************LED_Off**********************************
  * This function is used to turn off the the led connected to
  * any pin in any port register in the microcontroller through calling the
  * function DIO_write() and passing low value (0) to it.
@@ -47,10 +47,10 @@ void LED_on (uint8_t ledport, uint8_t ledpin);
  * and takes a number from 0 : 7.
  * 
  * Return: Void
-***************************LED_off**********************************/
-void LED_off (uint8_t ledport, uint8_t ledpin);
+***************************LED_Off**********************************/
+void LED_Off (uint8_t ledport, uint8_t ledpin);
 
-/***************************LED_toggle**********************************
+/***************************LED_Toggle**********************************
  * This function is used to toggle the the led connected to
  * any pin in any port register in the microcontroller through calling the
  * function DIO_toggle().
@@ -62,8 +62,8 @@ void LED_off (uint8_t ledport, uint8_t ledpin);
  * and takes a number from 0 : 7.
  * 
  * Return: Void
-***************************LED_toggle**********************************/
-void LED_toggle (uint8_t ledport, uint8_t ledpin);
+***************************LED_Toggle**********************************/
+void LED_Toggle (uint8_t ledport, uint8_t ledpin);
 
 
 #endif /* DIO_DRIVERS_ECUAL_LED_H_ */
