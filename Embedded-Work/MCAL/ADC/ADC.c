@@ -206,23 +206,26 @@ void ADC_Config(ST_ADC_config_t* pADC) {
     }
 }
 
+void ADC_Config_Pot(void) {
+    ADC_Config(&S_ADC_config);
+}
+
 void ADC_Enable(void) {
     SET_BIT(ADCSRA, ADEN);
 }
 
 void ADC_Init(uint8_t portName, uint8_t pinNumber) {
     DIO_Init_Pin(portName, pinNumber, IN);
-    ADC_Config(&S_ADC_config);
     ADC_Enable();
 }
 
-uint8_t ADC_Read(void) {    
+uint8_t ADC_Read(uint8_t pinNumber) {
     uint8_t digitalVoltageValue;
-    ADMUX = 0x40 | (ADC_CHANNEL3 & 0x0F);
+    ADMUX = 0x40 | (pinNumber & 0x0F);
     SET_BIT(ADCSRA, ADSC);
     while (READ_BIT(ADCSRA, ADIF) == 0);
     SET_BIT(ADCSRA, ADIF);
-   _delay_ms(1);
+    _delay_ms(1);
     digitalVoltageValue = ADCL;
     return digitalVoltageValue;
 }

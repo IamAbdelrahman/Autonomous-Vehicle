@@ -1,8 +1,8 @@
 /*
- * Platfrom_Types.h
+ * Platforms_types.h
  *
- *  Created on: Feb 12, 2023
- *      Author: ak - os
+ *  Created on: Dec 12, 2022
+ *  Author: Abdelrhaman Kamal
  */
 
 #ifndef PLATFORMS_TYPES_H_
@@ -23,14 +23,14 @@
 #define TRUE	(boolean)true
 #endif
 
-#define CPU_TYPE	CPU_TYPE_64
+#define CPU_TYPE        CPU_TYPE_64
 #define CPU_BIT_ORDER	MSB_FIRST
 #define CPU_BYTE_ORDER	HIGH_BYTE_FIRST
 
-typedef _Bool	boolean;
-typedef unsigned char uint8_t;
-typedef signed char	  int8_t;
-typedef long long	int64_t;
+typedef _Bool               boolean;
+typedef unsigned char       uint8_t;
+typedef signed char         int8_t;
+typedef long long           int64_t;
 typedef unsigned long long	uint64_t;
 
 typedef volatile int8_t     vint8_t;

@@ -3,7 +3,7 @@
  *
  *  Created on: Nov 11, 2022
  *      Author: ak
-*/
+ */
 
 #ifndef MCAL_TIMER_TIMER_H_
 #define MCAL_TIMER_TIMER_H_
@@ -40,113 +40,102 @@
 #define EX_CLK_SRC_FALLING_EDGE  6
 #define EX_CLK_SRC_RISING_EDGE   7
 
-typedef struct{
-    
+typedef struct {
     vuint8_t CS00 : 1;
     vuint8_t CS01 : 1;
     vuint8_t CS02 : 1;
-    vuint8_t WGM01: 1;
-    vuint8_t COM00: 1;
-    vuint8_t COM01: 1;
-    vuint8_t WGM00: 1;
+    vuint8_t WGM01 : 1;
+    vuint8_t COM00 : 1;
+    vuint8_t COM01 : 1;
+    vuint8_t WGM00 : 1;
     vuint8_t FOC0 : 1;
-    
-}ST_TCCR0_t;
+
+} ST_TCCR0_t;
 
 typedef union {
-        
     vuint8_t All_Bits;
-    ST_TCCR0_t Timer0;  
-    
-}U_TCCR0_t;
+    ST_TCCR0_t Timer0;
 
-typedef struct{
-    
-    vuint8_t WGM10  : 1;
-    vuint8_t WGM11  : 1;
-    vuint8_t FOC1B  : 1;
-    vuint8_t FOC1A  : 1;
+} U_TCCR0_t;
+
+typedef struct {
+    vuint8_t WGM10 : 1;
+    vuint8_t WGM11 : 1;
+    vuint8_t FOC1B : 1;
+    vuint8_t FOC1A : 1;
     vuint8_t COM1B0 : 1;
     vuint8_t COM1B1 : 1;
     vuint8_t COM1A0 : 1;
     vuint8_t COM1A1 : 1;
-    
-}ST_TCCR1A_t;
 
-typedef union{
-    
+} ST_TCCR1A_t;
+
+typedef union {
     vuint8_t All_Bits;
     ST_TCCR1A_t Timer1A;
-    
-}U_TCCR1A_t;
 
-typedef struct{
-    
-    vuint8_t CS10       : 1;
-    vuint8_t CS11       : 1;
-    vuint8_t CS12       : 1;
-    vuint8_t WGM12      : 1;
-    vuint8_t WGM13      : 1;
-    vuint8_t reserved   : 1;
-    vuint8_t ICES1      : 1;
-    vuint8_t ICNC1      : 1;
-    
-}ST_TCCR1B_t;
+} U_TCCR1A_t;
 
-typedef union{
-    
+typedef struct {
+    vuint8_t CS10 : 1;
+    vuint8_t CS11 : 1;
+    vuint8_t CS12 : 1;
+    vuint8_t WGM12 : 1;
+    vuint8_t WGM13 : 1;
+    vuint8_t reserved : 1;
+    vuint8_t ICES1 : 1;
+    vuint8_t ICNC1 : 1;
+
+} ST_TCCR1B_t;
+
+typedef union {
     vuint8_t All_Bits;
     ST_TCCR1B_t Timer1B;
-    
-}U_TCCR1B_t;
 
-typedef struct{
-    
+} U_TCCR1B_t;
+
+typedef struct {
     vuint8_t CS20 : 1;
     vuint8_t CS21 : 1;
     vuint8_t CS22 : 1;
-    vuint8_t WGM21: 1;
-    vuint8_t COM20: 1;
-    vuint8_t COM21: 1;
-    vuint8_t WGM20: 1;
+    vuint8_t WGM21 : 1;
+    vuint8_t COM20 : 1;
+    vuint8_t COM21 : 1;
+    vuint8_t WGM20 : 1;
     vuint8_t FOC2 : 1;
-    
-}ST_TCCR2_t;
 
-typedef union{
-    
+} ST_TCCR2_t;
+
+typedef union {
     vuint8_t All_Bits;
     ST_TCCR2_t Timer2;
-    
-}U_TCCR2_t;
 
-typedef struct{
-    
+} U_TCCR2_t;
+
+typedef struct {
     vuint8_t TOV0 : 1;
     vuint8_t OCF0 : 1;
     vuint8_t TOV1 : 1;
-    vuint8_t OCF1B: 1;
-    vuint8_t OCF1A: 1;
+    vuint8_t OCF1B : 1;
+    vuint8_t OCF1A : 1;
     vuint8_t ICF1 : 1;
     vuint8_t TOV2 : 1;
     vuint8_t OCF2 : 1;
-    
-}ST_TIFR_t;
 
-typedef union{
-    
+} ST_TIFR_t;
+
+typedef union {
     vuint8_t All_Bits;
     ST_TIFR_t TIFR_Reg;
-    
-}U_TIFR_t;
 
-typedef struct{
-    
+} U_TIFR_t;
+
+typedef struct {
     vuint8_t Timer_Channel;
     vuint8_t Timer_Mode;
     vuint8_t Timer_Start_Prescalar;
-    
-}ST_TIMER_config_t;
+
+} ST_TIMER_config_t;
 
 #define ADDRESS_TCCR0    (U_TCCR0_t*)(TCCR0)
 #define ADDRESS_TCCR2    (U_TCCR2_t*)(TCCR2)
@@ -164,8 +153,8 @@ typedef struct{
  * 
  * Return: Void
  ***************************TIMER_Init**********************************/
-void TIMER_Init(ST_TIMER_config_t* pTIMER);	
-void TIM0_Init (void);
+void TIMER_Init(ST_TIMER_config_t* pTIMER);
+void TIM0_Init(void);
 void TIM1_Init(void);
 void TIM2_Init(void);
 /*________________________________________________________________________________
@@ -217,8 +206,8 @@ ________________________________________________________________________________
  * 
  * Return: Void
  ***************************TIMER_Stop**********************************/
-void TIMER_Stop (ST_TIMER_config_t* pTIMER);
-void TIM0_Stop (void);
+void TIMER_Stop(ST_TIMER_config_t* pTIMER);
+void TIM0_Stop(void);
 void TIM2_Stop(void);
 void TIM1_Stop(void);
 /*________________________________________________________________________________
@@ -281,4 +270,3 @@ void TIM2_Reset(void);
 ________________________________________________________________________________*/
 
 #endif /* MCAL_TIMER_TIMER_H_ */
-

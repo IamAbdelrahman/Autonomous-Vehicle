@@ -96,7 +96,6 @@ typedef struct{
 void ADC_Config(ST_ADC_config_t* pADC);
 void ADC_Enalbe(void);
 void ADC_Init (uint8_t portName, uint8_t pinNumber);
-uint8_t ADC_Read(void); 
+uint8_t ADC_Read(uint8_t pinNumber); 
 
 #endif	/* ADC_h */
-

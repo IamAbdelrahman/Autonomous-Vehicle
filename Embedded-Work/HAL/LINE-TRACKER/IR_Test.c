@@ -16,9 +16,11 @@ int main() {
     while (1) {
         IR_read('B', 0, &IR_state);
         if (IR_state == HIGH) {
-            LED_On('C', 0);
+            LED_On('C', 0); // Detect white object
         } else if (IR_state == LOW) {
-            LED_Off('C', 0);
+            LED_Off('C', 0); // Detect black object
         }
     }
 }
+
+

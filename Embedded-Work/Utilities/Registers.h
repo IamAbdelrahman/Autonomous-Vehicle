@@ -60,6 +60,7 @@
 #define TCCR0       0x53	
 #define TCNT0       *((vuint8_t*)0x52)	
 #define TIFR        0x58
+#define TIFR_R      *((vuint8_t*)0x58)
 #define OCR0        *((vuint8_t*)0x5C)
 
 // TIMER1 - Registers
@@ -90,6 +91,14 @@
 #define ADTS0   5
 #define ADTS1   6
 #define ADTS2   7
+
+// USART - Registers
+#define UDR     *((vuint8_t*)0x2C)
+#define UCSRA   *((vuint8_t*)0x2B)
+#define UCSRB   *((vuint8_t*)0x2A)
+#define UBRRL   *((vuint16_t*)0x29)
+#define UBRRH   *((vuint16_t*)0x20)
+#define UCSRC   *((vuint16_t*)0x40)
 
 #define IN 0
 #define OUT 1

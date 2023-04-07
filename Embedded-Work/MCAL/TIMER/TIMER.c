@@ -15,7 +15,7 @@ ST_TIMER_config_t S_TIMER1 = {TIMER1, NORMAL_MODE, CLK_NO_PRESCALING};
 
 volatile U_TCCR0_t * const pTCCR0 = ADDRESS_TCCR0;
 volatile U_TCCR2_t * const pTCCR2 = ADDRESS_TCCR2;
-volatile U_TIFR_t * const pTIFR = ADDRESS_TIFR;
+volatile U_TIFR_t * pTIFR = ADDRESS_TIFR;
 volatile U_TCCR1A_t * const pTCCR1A = ADDRESS_TCCR1A;
 volatile U_TCCR1B_t * const pTCCR1B = ADDRESS_TCCR1B;
 
@@ -147,14 +147,50 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER) {
             pTCCR2->Timer2.CS20 = 1;
             pTCCR2->Timer2.CS21 = 0;
             pTCCR2->Timer2.CS22 = 1;
-        }            /* End of Choosing the Pre-scaler */
-        else if (pTIMER->Timer_Channel == TIMER1) {
-            /* Start of Choosing the Timer Mode*/
-            if (pTIMER->Timer_Mode == NORMAL_MODE) {
-                /* ??? ??????? */
-            }
+        } /* End of Choosing the Pre-scaler */
+    } else if (pTIMER->Timer_Channel == TIMER1) {
+        /* Start of Choosing the Timer Mode */
+        if (pTIMER->Timer_Mode == NORMAL_MODE) {
+            pTCCR1A->Timer1A.WGM10 = 0;
+            pTCCR1A->Timer1A.WGM11 = 0;
+            pTCCR1B->Timer1B.WGM12 = 0;
+            pTCCR1B->Timer1B.WGM13 = 0;
+        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
+            pTCCR1A->Timer1A.WGM10 = 1;
+            pTCCR1A->Timer1A.WGM11 = 0;
+            pTCCR1B->Timer1B.WGM12 = 1;
+            pTCCR1B->Timer1B.WGM13 = 0;
         }
+        /* End of Choosing the Timer Mode */
+
+        /* Start of Choosing the Pre-scaler */
+        if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
+            pTCCR1B->All_Bits = 0x00;
+
+        else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_8_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 0;
+            pTCCR1B->Timer1B.CS11 = 1;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_64_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 1;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_256_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 0;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 1;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_1024_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 1;
+        } /* End of Choosing the Pre-scaler */
+
     }
+
 }
 
 void TIM0_Init(void) {

@@ -10,7 +10,7 @@
 
 #include "Registers.h"
 #include "Platform_Types.h"
-#include<avr/delay.h>
+#include <avr/delay.h>
 typedef struct{
    
         vuint8_t pin0 : 1;
@@ -188,9 +188,43 @@ void DIO_Port_Read (uint8_t portName, uint8_t* portValue);
 /*________________________________________________________________________________
 ________________________________________________________________________________*/
 
+/***************************DDRX_Out/In**********************************
+ * This function can make the whole register to be data in or data out
+ * through calling the DIO_Port_Init().
+ *
+ * Inputs: It takes nothing
+ * 
+ * Return: Void
+***************************DDRX_Out/In**********************************/
+void DDRA_Out(void);
+void DDRA_In(void);
 void DDRB_Out(void);
-void DDRB_Low(void);
+void DDRB_In(void);
+void DDRC_Out(void);
+void DDRC_In(void);
+void DDRD_Out(void);
+void DDRD_In(void);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
+
+/***************************PORTX_High/Low**********************************
+ * This function can make the whole register(port) to be high or low
+ * through calling the DIO_Port_Write().
+ *
+ * Inputs: It takes nothing
+ * 
+ * Return: Void
+***************************PORTX_High/Low**********************************/
+void PORTA_High(void);
+void PORTA_Low(void);
 void PORTB_High(void);
 void PORTB_Low(void);
-#endif	/* DIO_H */
+void PORTC_High(void);
+void PORTC_Low(void);
+void PORTD_High(void);
+void PORTD_Low(void);
+/*________________________________________________________________________________
+________________________________________________________________________________*/
 
+
+#endif	/* DIO_H */

@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <avr/delay.h>
 #include "DIO.h"
-#include "TIMER.h"
-#include "ADC.h"
-#include "IR.h"
 #include "LED.h"
-#include "ULTRASONIC.h"
-#include "MOTOR.h"
 #include "BUTTON.h"
 int main() {
     uint8_t button_state;

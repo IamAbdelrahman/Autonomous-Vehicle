@@ -8,8 +8,7 @@
 #ifndef APP_H
 #define	APP_H
 #include "DIO.h"
-#include "MOTOR.h"
+#include "MOTORS.h"
 #include "TIMER.h"
 
 #endif	/* APP_H */
-

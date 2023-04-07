@@ -18,5 +18,4 @@ int main() {
 }
 
 
-// avrdude -c usbasp -p m32 -u -U flash:w:Motors_Test
-.hex
+// avrdude -c usbasp -p m32 -u -U flash:w:Motors_Test.hex
