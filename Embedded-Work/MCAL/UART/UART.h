@@ -25,15 +25,14 @@
 #define DATA_BITS_9 7
 
 #define PARITY_MODE_DISABLED    8
-#define PARITY_MODE_RESERVED    9
-#define PARITY_MODE_ENABLED_EVEN   10
-#define PARITY_MODE_ENABLED_ODD    11
+#define PARITY_MODE_ENABLED_EVEN   9
+#define PARITY_MODE_ENABLED_ODD    10
 
-#define STOP_BITS_1 12
-#define STOP_BITS_2 13
+#define STOP_BITS_1 11
+#define STOP_BITS_2 12
 
-#define NORMAL_SPEED    14
-#define DOUBLE_SPEED    15
+#define NORMAL_SPEED    13
+#define DOUBLE_SPEED    14
 
 typedef struct {
     uint64_t baudRate;
@@ -108,9 +107,9 @@ void UART_Parity (ST_UART_config_t *pUART);
 void UART_Data_Size(ST_UART_config_t *pUART);
 void UART_Stop_Bit(ST_UART_config_t *pUART);
 void UART_Speed(ST_UART_config_t *pUART);
-void UART_Initialize (uint64_t Baud_Rate);
-void USART_Transmit(uint8_t data);
-uint8_t USART_Receive(void);
-void USART_SendString(char *str);
+void UART_Init(uint16_t Baud_Rate);
+void UART_Transmit(uint8_t data);
+uint16_t UART_Receive(void);
+void UART_SendString(uint8_t *str);
 
 #endif	/* UART_H */
