@@ -1,7 +1,7 @@
 #include "UART.h"
 
 ST_UART_config_t S_UART = {BAUD_PRESCALE, TX_RX_ENABLE, DATA_BITS_8,
-    PARITY_MODE_DISABLED, STOP_BITS_2, NORMAL_SPEED};
+    PARITY_MODE_DISABLED, STOP_BITS_1, NORMAL_SPEED};
 
 volatile UUCSRA_t * const pUCSRA = ADDRESS_UCSRA;
 volatile UUCSRB_t * const pUCSRB = ADDRESS_UCSRB;
@@ -45,6 +45,7 @@ void UART_Data_Size(ST_UART_config_t *pUART) {
 }
 
 void UART_Parity(ST_UART_config_t *pUART) {
+    pUCSRC->Ucsrc.URSEL = 1; // Enable accessing the USCRC Register.
     if (pUART->parity == PARITY_MODE_DISABLED) {
         pUCSRC->Ucsrc.UPM0 = 0;
         pUCSRC->Ucsrc.UPM1 = 0;
@@ -58,6 +59,7 @@ void UART_Parity(ST_UART_config_t *pUART) {
 }
 
 void UART_Stop_Bit(ST_UART_config_t *pUART) {
+    pUCSRC->Ucsrc.URSEL = 1; // Enable accessing the USCRC Register.
     if (pUART->stopbitsNumber == STOP_BITS_1) {
         pUCSRC->Ucsrc.USBS = 0;
     } else if (pUART->stopbitsNumber == STOP_BITS_2) {
@@ -75,26 +77,24 @@ void UART_Speed(ST_UART_config_t *pUART) {
 
 void UART_Init(uint16_t Baud_Rate) {
     /* Set baud rate */
-    UBRRL = (uint8_t) BAUD_PRESCALE;
-    UBRRH = (uint8_t) (BAUD_PRESCALE >> 8);
+    UBRRL = (uint8_t) Baud_Rate;
+    UBRRH = (uint8_t) (Baud_Rate >> 8);
     UART_TX_RX_Enable(&S_UART);
     UART_Data_Size(&S_UART);
     UART_Parity(&S_UART);
     UART_Stop_Bit(&S_UART);
-    UART_Speed(&S_UART);
 }
 
 void UART_Transmit(uint8_t data) {
     /* Wait for empty transmit buffer */
-    while (!(pUCSRA->Ucsra.UDRE));
+    while (pUCSRA->Ucsra.UDRE == 0);
     /* Put data into buffer, sends the data */
     UDR = data;
 }
 
 uint16_t UART_Receive(void) {
     /* Wait for data to be received */
-    while (!(pUCSRA->Ucsra.RXC));
-
+    while (pUCSRA->Ucsra.RXC == 0);
     /* Get and return received data from buffer */
     return UDR;
 }

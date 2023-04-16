@@ -102,14 +102,98 @@ typedef union {
 #define ADDRESS_UCSRB    (UUCSRB_t*)(UCSRB)
 #define ADDRESS_UCSRC    (UUCSRC_t*)(UCSRC)
 
-void UART_TX_RX_Enable (ST_UART_config_t *pUART);
-void UART_Parity (ST_UART_config_t *pUART);
+/******************************UART_TX_RX_Enable()**********************************
+ * Description: This function is used to enable the transmitting or receiving
+ * in the micro-controller or both of them
+ * 
+ * Input : It takes a pointer to structure that includes the configurations of 
+ * the uart application.
+ * Return: It returns nothing.
+ ******************************UART_TX_RX_Enable()************************************/
+void UART_TX_RX_Enable(ST_UART_config_t *pUART);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Parity()**********************************
+ * Description: This function is used to enable or disable the parity mode 
+ * in micro-controller
+ * 
+ * Input : It takes a pointer to structure that includes the configurations of 
+ * the uart application.
+ * Return: It returns nothing.
+ ******************************UART_Parity()************************************/
+void UART_Parity(ST_UART_config_t *pUART);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Data_Size()**********************************
+ * Description: This function is used to determine the data sent size from
+ * 5 - 9 bits
+ * 
+ * Input : It takes a pointer to structure that includes the configurations of 
+ * the uart application.
+ * Return: It returns nothing.
+ ******************************UART_Data_Size()************************************/
 void UART_Data_Size(ST_UART_config_t *pUART);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Stop_Bit()**********************************
+ * Description: This function is used to determine the number of stop bits
+ * of the data sent (1 or 2) bits
+ * 
+ * Input : It takes a pointer to structure that includes the configurations of 
+ * the uart application.
+ * Return: It returns nothing.
+ ******************************UART_Stop_Bit()************************************/
 void UART_Stop_Bit(ST_UART_config_t *pUART);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Speed()**********************************
+ * Description: This function is used to determine the speed of transmitting
+ * of data whether it should be normal or double
+ * 
+ * Input : It takes a pointer to structure that includes the configurations of 
+ * the uart application.
+ * Return: It returns nothing.
+ ******************************UART_Speed()************************************/
 void UART_Speed(ST_UART_config_t *pUART);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Init()**********************************
+ * Description: This function is used to initialize the uart through
+ * calling all the function above
+ * 
+ * Input : It takes an unsigned short int to store the baudrate (e.g. 9600)
+ * Return: It returns nothing.
+ ******************************UART_Init()************************************/
 void UART_Init(uint16_t Baud_Rate);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Transmit()**********************************
+ * Description: This function is used to transmit data by waiting for the UDRE
+ * to be empty (the transmision buffering).
+ * 
+ * Input : It takes an unsigned character to store the data sent.
+ * Return: It returns nothing.
+ ******************************UART_Transmit()************************************/
 void UART_Transmit(uint8_t data);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Receive()**********************************
+ * Description: This function is used to receive data from outside the world
+ * 
+ * Input : It takes an unsigned character to store the data sent.
+ * Return: It returns nothing.
+ ******************************UART_Receive()************************************/
 uint16_t UART_Receive(void);
+/*___________________________________________________________________________________*/
+
+/******************************UART_Receive()**********************************
+ * Description: This function is used to send string
+ * 
+ * Input : It takes a pointer to character
+ * Return: It returns nothing.
+ ******************************UART_Receive()************************************/
 void UART_SendString(uint8_t *str);
+/*___________________________________________________________________________________*/
+
 
 #endif	/* UART_H */
