@@ -7,14 +7,7 @@
 
 #ifndef REGISTERS_H_
 #define REGISTERS_H_
-#include "Platform_Types.h"
-
-#define F_CPU  16000000UL
-#define SET_BIT(X, BIT_NO)      (X |= (1 << BIT_NO))
-#define CLR_BIT(X, BIT_NO)      (X &= ~(1 << BIT_NO))
-#define TOGGLE_BIT(X, BIT_NO)   (X ^= (1 << BIT_NO))
-#define READ_BIT(X, BIT_NO)     ((X & (1 << BIT_NO) >> BIT_NO))
-
+#include "Macros.h"
 /* PORT A Registers */
 #define PORTA   *((vuint8_t*)0x3B)	
 #define DDRA    *((vuint8_t*)0x3A)	
@@ -93,17 +86,12 @@
 #define ADTS2   7
 
 // USART - Registers
-#define UDR     *((vuint8_t*)0x2C)
-#define UCSRA   *((vuint8_t*)0x2B)
-#define UCSRB   *((vuint8_t*)0x2A)
-#define UBRRL   *((vuint16_t*)0x29)
-#define UBRRH   *((vuint16_t*)0x20)
-#define UCSRC   *((vuint16_t*)0x40)
-
-#define IN 0
-#define OUT 1
-
-#define HIGH 1
-#define LOW 0
+#define UDR     *((vuint16_t*)0x2C)
+#define UCSRA   0x2B
+#define ucsra   *((vuint8_t*)0x2B)
+#define UCSRB   0x2A
+#define UCSRC   0x40
+#define UBRRL   *((vuint8_t*)0x29)
+#define UBRRH   *((vuint8_t*)0x40)
 
 #endif /* REGISTERS_H_ */

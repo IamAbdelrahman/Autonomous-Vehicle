@@ -1,12 +1,12 @@
 #include "BLUETOOTH.h"
 
-void BLUETOOTH_Init(void) {
-    USART_Init(USART_BAUDRATE);
+void BLUETOOTH_Init(uint16_t Baud_Rate) {
+    UART_Init(Baud_Rate);
 }
 
 void BLUETOOTH_Read(uint8_t Data_In) {
-    Data_In = USART_Receive();
-    USART_Transmit(Data_In);
+    Data_In = UART_ReceiveChar();
+    UART_TransmitChar(Data_In);
     if (Data_In == 'w' || Data_In == 'W' || Data_In == '1') {
         Move_Forward();
     } else if (Data_In == 's' || Data_In == 'S' || Data_In == '2') {

@@ -8,7 +8,6 @@
 #ifndef UART_H
 #define	UART_H
 #include "Registers.h"
-#include "DIO.h"
 
 #define USART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)	
@@ -167,33 +166,41 @@ void UART_Speed(ST_UART_config_t *pUART);
 void UART_Init(uint16_t Baud_Rate);
 /*___________________________________________________________________________________*/
 
-/******************************UART_Transmit()**********************************
+/******************************UART_TransmitChar()**********************************
  * Description: This function is used to transmit data by waiting for the UDRE
  * to be empty (the transmision buffering).
  * 
  * Input : It takes an unsigned character to store the data sent.
  * Return: It returns nothing.
- ******************************UART_Transmit()************************************/
-void UART_Transmit(uint8_t data);
+ ******************************UART_TransmitChar()************************************/
+void UART_TransmitChar(uint8_t data);
 /*___________________________________________________________________________________*/
 
-/******************************UART_Receive()**********************************
+/******************************UART_ReceiveChar()**********************************
  * Description: This function is used to receive data from outside the world
  * 
  * Input : It takes an unsigned character to store the data sent.
  * Return: It returns nothing.
- ******************************UART_Receive()************************************/
-uint16_t UART_Receive(void);
+ ******************************UART_ReceiveChar()************************************/
+uint16_t UART_ReceiveChar(void);
 /*___________________________________________________________________________________*/
 
-/******************************UART_Receive()**********************************
+/******************************UART_TransmitString()**********************************
  * Description: This function is used to send string
  * 
  * Input : It takes a pointer to character
  * Return: It returns nothing.
- ******************************UART_Receive()************************************/
-void UART_SendString(uint8_t *str);
+ ******************************UART_TransmitString()************************************/
+void UART_TransmitString(uint8_t *str);
 /*___________________________________________________________________________________*/
 
+/******************************UART_ReceiveString()**********************************
+ * Description: This function is used to receive string
+ * 
+ * Input : It takes void
+ * Return: It returns pointer to character.
+ ******************************UART_ReceiveString()************************************/
+uint8_t* UART_ReceiveString(void);
+/*___________________________________________________________________________________*/
 
 #endif	/* UART_H */

@@ -85,25 +85,36 @@ void UART_Init(uint16_t Baud_Rate) {
     UART_Stop_Bit(&S_UART);
 }
 
-void UART_Transmit(uint8_t data) {
+void UART_TransmitChar(uint8_t data) {
     /* Wait for empty transmit buffer */
     while (pUCSRA->Ucsra.UDRE == 0);
     /* Put data into buffer, sends the data */
     UDR = data;
 }
 
-uint16_t UART_Receive(void) {
+uint16_t UART_ReceiveChar(void) {
     /* Wait for data to be received */
     while (pUCSRA->Ucsra.RXC == 0);
     /* Get and return received data from buffer */
     return UDR;
 }
 
-void UART_SendString(uint8_t *str) {
-    uint8_t j = 0;
+void UART_TransmitString(uint8_t *str) {
+    uint8_t Char = 0;
 
-    while (str[j] != 0) /* Send string till null */ {
-        UART_Transmit(str[j]);
-        j++;
+    while (str[Char] != 0) /* Send string till null */ {
+        UART_TransmitChar(str[Char]);
+        Char++;
     }
+}
+
+uint8_t* UART_ReceiveString(void) {
+    uint8_t Char = 0;
+    uint8_t *String;
+    while (String[Char] != '\0') {
+        String[Char] = UART_ReceiveChar();
+        Char++;
+
+    }
+    return (String);
 }

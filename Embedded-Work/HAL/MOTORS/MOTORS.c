@@ -169,8 +169,7 @@ void Move_Forward() {
 }
 
 void Move_Backward() {
-    MOTORS_Left_Clkwise();
-    MOTORS_Right_Anticlkwise();
+    MOTORS_Anticlkwise();
 }
 
 void Move_Right() {

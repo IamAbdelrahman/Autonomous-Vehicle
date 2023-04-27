@@ -18,7 +18,7 @@
  * Input : It takes nothing.
  * Return: It returns nothing.
  ******************************BLUETOOTH_Init()************************************/
-void BLUETOOTH_Init(void);
+void BLUETOOTH_Init(uint16_t Baud_Rate);
 /*_________________________________________________________________*/
 
 /******************************BLUETOOTH_Read()**********************************
