@@ -1,43 +1,44 @@
 #include "MOTORS.h"
 
-void MOTOR1_Init(void) {
+void motor1Init(void) {
     DIO_Init_Pin('B', 0, OUT);
     DIO_Init_Pin('B', 1, OUT);
 }
 
-void MOTOR2_Init(void) {
+void motor2Init(void) {
     DIO_Init_Pin('B', 2, OUT);
     DIO_Init_Pin('B', 4, OUT);
 }
 
-void MOTOR3_Init(void) {
+void motor3Init(void) {
     DIO_Init_Pin('C', 0, OUT);
     DIO_Init_Pin('C', 1, OUT);
 }
 
-void MOTOR4_Init(void) {
+void motor4Init(void) {
     DIO_Init_Pin('C', 2, OUT);
     DIO_Init_Pin('C', 3, OUT);
 }
 
-void MOTORS_Left_Init() {
-    MOTOR1_Init();
-    MOTOR2_Init();
+void leftmotorsInit() {
+    motor1Init();
+    motor2Init();
 }
 
-void MOTORS_Right_Init() {
-    MOTOR3_Init();
-    MOTOR4_Init();
+void rightmotorsInit() {
+    motor3Init();
+    motor4Init();
 }
 
-void MOTORS_Init(void) {
+void motorsInit(void) {
     /* Initialize All Motors*/
-    MOTORS_Left_Init();
-    MOTORS_Right_Init();
+    leftmotorsInit();
+    rightmotorsInit();
     /* Initialize Timer0 for PWM Generation */
     TIM0_Init();
     TIM0_Start();
-
+    /* Initialize Sensors for controlling movement */
+    lineTrackerInit('D', 1);
     /* Clearing The pins connected to Motors */
     DIO_Write_Pin('B', 0, LOW); // Motor1
     DIO_Write_Pin('B', 1, LOW);
@@ -52,146 +53,279 @@ void MOTORS_Init(void) {
     DIO_Write_Pin('C', 3, LOW);
 }
 
-void MOTOR1_Clkwise() {
+void motor1Forward() {
     DIO_Write_Pin('B', 0, HIGH);
     DIO_Write_Pin('B', 1, LOW);
 }
 
-void MOTOR1_Anticlkwise() {
+void motor1Backward() {
     DIO_Write_Pin('B', 0, LOW);
     DIO_Write_Pin('B', 1, HIGH);
 }
 
-void MOTOR1_Stop() {
+void motor1Stop() {
     DIO_Write_Pin('B', 0, LOW);
     DIO_Write_Pin('B', 1, LOW);
 }
 
-void MOTOR2_Clkwise() {
+void motor2Forward() {
     DIO_Write_Pin('B', 2, HIGH);
     DIO_Write_Pin('B', 4, LOW);
 }
 
-void MOTOR2_Anticlkwise() {
+void motor2Backward() {
     DIO_Write_Pin('B', 2, LOW);
     DIO_Write_Pin('B', 4, HIGH);
 }
 
-void MOTOR2_Stop() {
+void motor2Stop() {
     DIO_Write_Pin('B', 2, LOW);
     DIO_Write_Pin('B', 4, LOW);
 }
 
-void MOTOR3_Clkwise() {
+void motor3Forward() {
     DIO_Write_Pin('C', 0, HIGH);
     DIO_Write_Pin('C', 1, LOW);
 }
 
-void MOTOR3_Anticlkwise() {
+void motor3Backward() {
     DIO_Write_Pin('C', 0, LOW);
     DIO_Write_Pin('C', 1, HIGH);
 }
 
-void MOTOR3_Stop() {
+void motor3Stop() {
     DIO_Write_Pin('C', 0, LOW);
     DIO_Write_Pin('C', 1, LOW);
 }
 
-void MOTOR4_Clkwise() {
+void motor4Forward() {
     DIO_Write_Pin('C', 2, HIGH);
     DIO_Write_Pin('C', 3, LOW);
 }
 
-void MOTOR4_Anticlkwise() {
+void motor4Backward() {
     DIO_Write_Pin('C', 2, LOW);
     DIO_Write_Pin('C', 3, HIGH);
 }
 
-void MOTOR4_Stop() {
+void motor4Stop() {
     DIO_Write_Pin('C', 2, LOW);
     DIO_Write_Pin('C', 3, LOW);
 }
 
-void MOTORS_Left_Clkwise() {
-    MOTOR1_Clkwise();
-    MOTOR2_Clkwise();
+void leftMotorsForward() {
+    motor1Forward();
+    motor2Forward();
 }
 
-void MOTORS_Left_Anticlkwise() {
-    MOTOR1_Anticlkwise();
-    MOTOR2_Anticlkwise();
+void leftMotorsBackward() {
+    motor1Backward();
+    motor2Backward();
 }
 
-void MOTORS_Left_Stop() {
-    MOTOR1_Stop();
-    MOTOR2_Stop();
+void leftMotorsStop() {
+    motor1Stop();
+    motor2Stop();
 }
 
-void MOTORS_Right_Clkwise() {
-    MOTOR3_Clkwise();
-    MOTOR4_Clkwise();
+void rightMotorsForward() {
+    motor3Forward();
+    motor4Forward();
 }
 
-void MOTORS_Right_Anticlkwise() {
-    MOTOR3_Anticlkwise();
-    MOTOR4_Anticlkwise();
+void rightMotorsBackward() {
+    motor3Backward();
+    motor4Backward();
 }
 
-void MOTORS_Right_Stop() {
-    MOTOR3_Stop();
-    MOTOR4_Stop();
+void rightMotorsStop() {
+    motor3Stop();
+    motor4Stop();
 }
 
-void MOTORS_Clkwise() {
-    MOTOR1_Clkwise();
-    MOTOR2_Clkwise();
-    MOTOR3_Clkwise();
-    MOTOR4_Clkwise();
+void motorsForward() {
+    motor1Forward();
+    motor2Forward();
+    motor3Forward();
+    motor4Forward();
 }
 
-void MOTORS_Anticlkwise() {
-    MOTOR1_Anticlkwise();
-    MOTOR2_Anticlkwise();
-    MOTOR3_Anticlkwise();
-    MOTOR4_Anticlkwise();
+void motorsBackward() {
+    motor1Backward();
+    motor2Backward();
+    motor3Backward();
+    motor4Backward();
 }
 
-void MOTORS_Stop() {
-    MOTOR1_Stop();
-    MOTOR2_Stop();
-    MOTOR3_Stop();
-    MOTOR4_Stop();
+void motorsStop() {
+    motor1Stop();
+    motor2Stop();
+    motor3Stop();
+    motor4Stop();
     TIM0_Stop();
 }
 
-void Move_Forward() {
-    MOTORS_Clkwise();
+void Stop() {
+    motorsStop();
+    _delay_ms(100);
 }
 
-void Move_Backward() {
-    MOTORS_Anticlkwise();
+/* Directions Functions */
+
+void moveForward() {
+    motorsForward();
 }
 
-void Move_Right() {
-    MOTORS_Right_Anticlkwise();
-    MOTORS_Left_Clkwise();
+void moveBackward() {
+    motorsBackward();
 }
 
-void Move_Left() {
-    MOTORS_Left_Anticlkwise();
-    MOTORS_Right_Clkwise();
+void moveForwardRight() {
+    rightMotorsStop();
+    leftMotorsForward();
 }
 
-void Turn_Right() {
-    Move_Right();
+void moveBackwardRight() {
+    leftMotorsStop();
+    rightMotorsBackward();
+}
+
+void moveForwardLeft() {
+    leftMotorsStop();
+    rightMotorsForward();
+}
+void moveBackwardLeft() {
+    rightMotorsStop();
+    leftMotorsBackward();
+}
+
+void rotateForwardRight() {
+    moveForwardRight();
     _delay_ms(750);
-    MOTORS_Stop();
+    Stop();
 }
 
-void Turn_Left() {
-    Move_Left();
+void rotateBackwardRight() {
+    moveBackwardRight();
     _delay_ms(750);
-    MOTORS_Stop();
+    Stop();
+}
+
+void rotateForwardLeft() {
+    moveForwardLeft();
+    _delay_ms(750);
+    Stop();
+}
+
+void rotateBackwardLeft() {
+    moveBackwardLeft();
+    _delay_ms(750);
+    Stop();
+}
+
+void turnAroundForwardRight(){
+    moveForwardRight();
+    _delay_ms(1500);
+    Stop();
+}
+
+void turnAroundBackwardRight(){
+    moveBackwardRight();
+    _delay_ms(1500);
+    Stop();
+}
+
+void turnAroundForwardLeft(){
+    moveForwardLeft();
+    _delay_ms(1500);
+    Stop();
+}
+
+void turnAroundBackwardLeft(){
+    moveBackwardLeft();
+    _delay_ms(1500);
+    Stop();
+}
+
+void stopAtDistance(float distance_cm) {
+    float d = Distance();
+    if (d <= distance_cm) {
+        Stop();
+        _delay_ms(1000);
+    }
+}
+
+uint8_t detectBlackLine () {
+    uint8_t lineState = 1;
+    lineTrackerRead('D', 1, &lineState);
+    if (lineState == LOW) {
+        return 1;
+    }
+    else if (lineState == HIGH) {
+        return 0;
+    }        
+}
+
+void goToRoom1() {
+    moveForward();
+    stopAtDistance(10);
+}
+void returnFromRoom1() {       
+    turnAroundForwardRight();    
+    moveForward();
+    stopAtDistance(10);
+    turnAroundForwardLeft();
+}
+
+void goToRoom2(){
+    moveForward();
+    if (detectBlackLine()){
+       rotateForwardRight(); 
+    }
+    moveForward();
+    stopAtDistance(20);
+    rotateForwardLeft();
+    moveForward();
+    stopAtDistance(10);
+    rotateForwardRight();    
+}
+void returnFromRoom2(){
+    
+}
+void goToRoom3(void){
+    rotateForwardRight();
+    moveForward();
+    stopAtDistance(10);    
+}
+void returnFromRoom3() {
+    turnAroundForwardLeft();
+    moveForward();
+    stopAtDistance(10); 
+    rotateForwardRight();    
+}
+
+void goToRoom1_2(void){
+    goToRoom1();
+    rotateForwardRight();
+    moveForward();
+    // rotateForwardLeft();
+    stopAtDistance(10);
+}
+void goToRoom2_3(void){
+    goToRoom2();
+    rotateForwardRight();
+    moveForward();
+    stopAtDistance(10);
+}
+void goToRoom1_3(void){
+    goToRoom1_2();
+    rotateForwardRight();
+    moveForward();
+    stopAtDistance(10);    
+}
+void goToRoom1_2_3(void){
+    goToRoom1_2();
+    
 }
 
 void MOTOR_Speed(uint8_t speed) {

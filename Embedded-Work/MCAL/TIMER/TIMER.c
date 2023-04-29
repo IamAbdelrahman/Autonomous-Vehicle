@@ -13,58 +13,111 @@ ST_TIMER_config_t S_TIMER0 = {TIMER0, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESC
 ST_TIMER_config_t S_TIMER2 = {TIMER2, NORMAL_MODE, CLK_1024_PRESCALING};
 ST_TIMER_config_t S_TIMER1 = {TIMER1, NORMAL_MODE, CLK_NO_PRESCALING};
 
-volatile U_TCCR0_t * const pTCCR0 = ADDRESS_TCCR0;
-volatile U_TCCR2_t * const pTCCR2 = ADDRESS_TCCR2;
-volatile U_TIFR_t * pTIFR = ADDRESS_TIFR;
-volatile U_TCCR1A_t * const pTCCR1A = ADDRESS_TCCR1A;
-volatile U_TCCR1B_t * const pTCCR1B = ADDRESS_TCCR1B;
+volatile U_TCCR0_t* const pTCCR0 = ADDRESS_TCCR0;
+volatile U_TCCR2_t* const pTCCR2 = ADDRESS_TCCR2;
+volatile U_TIFR_t* pTIFR = ADDRESS_TIFR;
+volatile U_TCCR1A_t* const pTCCR1A = ADDRESS_TCCR1A;
+volatile U_TCCR1B_t* const pTCCR1B = ADDRESS_TCCR1B;
 
-void TIMER_Init(ST_TIMER_config_t* pTIMER) {
-    pTCCR0->All_Bits = 0x00;
-    pTCCR2->All_Bits = 0x00;
-    pTCCR1A->All_Bits = 0x00;
-    pTCCR1B->All_Bits = 0x00;
-
+void TIMER_Channel(ST_TIMER_config_t* pTIMER) {
     if (pTIMER->Timer_Channel == TIMER0) {
-        /* Start of Choosing the Timer Mode */
+        pTCCR0->All_Bits = 0x00;
+    } else if (pTIMER->Timer_Channel == TIMER1) {
+        pTCCR1A->All_Bits = 0x00;
+        pTCCR1B->All_Bits = 0x00;
+    } else if (pTIMER->Timer_Channel == TIMER2) {
+        pTCCR2->All_Bits = 0x00;
+    }
+}
+
+void TIMER_NormalMode(ST_TIMER_config_t* pTIMER) {
+    if (pTIMER->Timer_Channel == TIMER0) {
         if (pTIMER->Timer_Mode == NORMAL_MODE) {
             pTCCR0->Timer0.WGM00 = 0;
             pTCCR0->Timer0.WGM01 = 0;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_INVERTED) {
+        }
+    } else if (pTIMER->Timer_Channel == TIMER2) {
+        if (pTIMER->Timer_Mode == NORMAL_MODE) {
+            pTCCR2->Timer2.WGM20 = 0;
+            pTCCR2->Timer2.WGM21 = 0;
+        }
+    } else if (pTIMER->Timer_Channel == TIMER1) {
+        if (pTIMER->Timer_Mode == NORMAL_MODE) {
+            pTCCR1A->Timer1A.WGM10 = 0;
+            pTCCR1A->Timer1A.WGM11 = 0;
+            pTCCR1B->Timer1B.WGM12 = 0;
+            pTCCR1B->Timer1B.WGM13 = 0;
+        }
+    }
+}
 
-            DIO_Init_Pin('B', 7, OUT);
+void TIMER_pwmMode(ST_TIMER_config_t* pTIMER) {
+    if (pTIMER->Timer_Channel == TIMER0) {
+        if (pTIMER->Timer_Mode == PWM_MODE_FAST_INVERTED) {
+            DIO_Init_Pin('B', 3, OUT);
             pTCCR0->Timer0.WGM00 = 1;
             pTCCR0->Timer0.WGM01 = 1;
             pTCCR0->Timer0.COM00 = 1;
             pTCCR0->Timer0.COM01 = 1;
         } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
-
             DIO_Init_Pin('B', 3, OUT);
             pTCCR0->Timer0.WGM00 = 1;
             pTCCR0->Timer0.WGM01 = 1;
             pTCCR0->Timer0.COM00 = 0;
             pTCCR0->Timer0.COM01 = 1;
         } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_INVERTED) {
-
             DIO_Init_Pin('B', 3, OUT);
             pTCCR0->Timer0.WGM00 = 1;
             pTCCR0->Timer0.WGM01 = 0;
             pTCCR0->Timer0.COM00 = 1;
             pTCCR0->Timer0.COM01 = 1;
         } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_NON_INVERTED) {
-
             DIO_Init_Pin('B', 3, OUT);
             pTCCR0->Timer0.WGM00 = 1;
             pTCCR0->Timer0.WGM01 = 0;
             pTCCR0->Timer0.COM00 = 0;
             pTCCR0->Timer0.COM01 = 1;
         }
-        /* End of Choosing the Timer Mode */
+    } else if (pTIMER->Timer_Channel == TIMER1) {
+        if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
+            pTCCR1A->Timer1A.WGM10 = 1;
+            pTCCR1A->Timer1A.WGM11 = 0;
+            pTCCR1B->Timer1B.WGM12 = 1;
+            pTCCR1B->Timer1B.WGM13 = 0;
+        }
+    } else if (pTIMER->Timer_Channel == TIMER2) {
+        if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
+            DIO_Init_Pin('D', 7, OUT);
+            pTCCR2->Timer2.WGM20 = 1;
+            pTCCR2->Timer2.WGM21 = 1;
+            pTCCR2->Timer2.COM20 = 0;
+            pTCCR2->Timer2.COM21 = 1;
+        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_INVERTED) {
+            DIO_Init_Pin('D', 7, OUT);
+            pTCCR2->Timer2.WGM20 = 1;
+            pTCCR2->Timer2.WGM21 = 1;
+            pTCCR2->Timer2.COM20 = 1;
+            pTCCR2->Timer2.COM21 = 1;
+        } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_INVERTED) {
+            DIO_Init_Pin('D', 7, OUT);
+            pTCCR2->Timer2.WGM20 = 1;
+            pTCCR2->Timer2.WGM21 = 0;
+            pTCCR2->Timer2.COM20 = 1;
+            pTCCR2->Timer2.COM21 = 1;
+        } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_NON_INVERTED) {
+            DIO_Init_Pin('D', 7, OUT);
+            pTCCR2->Timer2.WGM20 = 1;
+            pTCCR2->Timer2.WGM21 = 0;
+            pTCCR2->Timer2.COM20 = 0;
+            pTCCR2->Timer2.COM21 = 1;
+        }
+    }
+}
 
-        /* Start of Choosing the Pre-scaler*/
+void TIMER_Prescaler(ST_TIMER_config_t* pTIMER) {
+    if (pTIMER->Timer_Channel == TIMER0) {
         if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
             pTCCR0->All_Bits = 0x00;
-
         else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING) {
             pTCCR0->Timer0.CS00 = 1;
             pTCCR0->Timer0.CS01 = 0;
@@ -86,44 +139,32 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER) {
             pTCCR0->Timer0.CS01 = 0;
             pTCCR0->Timer0.CS02 = 1;
         }
-        /* End of Choosing the Pre-scaler*/
-    } else if (pTIMER->Timer_Channel == TIMER2) {
-        /* Start of Choosing the Timer Mode */
-        if (pTIMER->Timer_Mode == NORMAL_MODE) {
-            pTCCR2->Timer2.WGM20 = 0;
-            pTCCR2->Timer2.WGM21 = 0;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
-
-            DIO_Init_Pin('D', 7, OUT);
-            pTCCR2->Timer2.WGM20 = 1;
-            pTCCR2->Timer2.WGM21 = 1;
-            pTCCR2->Timer2.COM20 = 0;
-            pTCCR2->Timer2.COM21 = 1;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_INVERTED) {
-
-            DIO_Init_Pin('D', 7, OUT);
-            pTCCR2->Timer2.WGM20 = 1;
-            pTCCR2->Timer2.WGM21 = 1;
-            pTCCR2->Timer2.COM20 = 1;
-            pTCCR2->Timer2.COM21 = 1;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_INVERTED) {
-
-            SET_BIT(DDRD, 7); // The OC2 Bit
-            pTCCR2->Timer2.WGM20 = 1;
-            pTCCR2->Timer2.WGM21 = 0;
-            pTCCR2->Timer2.COM20 = 1;
-            pTCCR2->Timer2.COM21 = 1;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_PHASE_CORRECT_NON_INVERTED) {
-
-            SET_BIT(DDRD, 7); // The OC2 Bit.
-            pTCCR2->Timer2.WGM20 = 1;
-            pTCCR2->Timer2.WGM21 = 0;
-            pTCCR2->Timer2.COM20 = 0;
-            pTCCR2->Timer2.COM21 = 1;
+    }
+    else if (pTIMER->Timer_Channel == TIMER1) {
+        if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
+            pTCCR1B->All_Bits = 0x00;
+        else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_8_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 0;
+            pTCCR1B->Timer1B.CS11 = 1;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_64_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 1;
+            pTCCR1B->Timer1B.CS12 = 0;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_256_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 0;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 1;
+        } else if (pTIMER->Timer_Start_Prescalar == CLK_1024_PRESCALING) {
+            pTCCR1B->Timer1B.CS10 = 1;
+            pTCCR1B->Timer1B.CS11 = 0;
+            pTCCR1B->Timer1B.CS12 = 1;
         }
-        /* End of Choosing the Timer Mode */
-
-        /* Start of Choosing the Pre-scaler */
+    } else if (pTIMER->Timer_Channel == TIMER2) {
         if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
             pTCCR2->All_Bits = 0x00;
 
@@ -147,62 +188,26 @@ void TIMER_Init(ST_TIMER_config_t* pTIMER) {
             pTCCR2->Timer2.CS20 = 1;
             pTCCR2->Timer2.CS21 = 0;
             pTCCR2->Timer2.CS22 = 1;
-        } /* End of Choosing the Pre-scaler */
-    } else if (pTIMER->Timer_Channel == TIMER1) {
-        /* Start of Choosing the Timer Mode */
-        if (pTIMER->Timer_Mode == NORMAL_MODE) {
-            pTCCR1A->Timer1A.WGM10 = 0;
-            pTCCR1A->Timer1A.WGM11 = 0;
-            pTCCR1B->Timer1B.WGM12 = 0;
-            pTCCR1B->Timer1B.WGM13 = 0;
-        } else if (pTIMER->Timer_Mode == PWM_MODE_FAST_NON_INVERTED) {
-            pTCCR1A->Timer1A.WGM10 = 1;
-            pTCCR1A->Timer1A.WGM11 = 0;
-            pTCCR1B->Timer1B.WGM12 = 1;
-            pTCCR1B->Timer1B.WGM13 = 0;
         }
-        /* End of Choosing the Timer Mode */
-
-        /* Start of Choosing the Pre-scaler */
-        if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
-            pTCCR1B->All_Bits = 0x00;
-
-        else if (pTIMER->Timer_Start_Prescalar == CLK_NO_PRESCALING) {
-            pTCCR1B->Timer1B.CS10 = 1;
-            pTCCR1B->Timer1B.CS11 = 0;
-            pTCCR1B->Timer1B.CS12 = 0;
-        } else if (pTIMER->Timer_Start_Prescalar == CLK_8_PRESCALING) {
-            pTCCR1B->Timer1B.CS10 = 0;
-            pTCCR1B->Timer1B.CS11 = 1;
-            pTCCR1B->Timer1B.CS12 = 0;
-        } else if (pTIMER->Timer_Start_Prescalar == CLK_64_PRESCALING) {
-            pTCCR1B->Timer1B.CS10 = 1;
-            pTCCR1B->Timer1B.CS11 = 1;
-            pTCCR1B->Timer1B.CS12 = 0;
-        } else if (pTIMER->Timer_Start_Prescalar == CLK_256_PRESCALING) {
-            pTCCR1B->Timer1B.CS10 = 0;
-            pTCCR1B->Timer1B.CS11 = 0;
-            pTCCR1B->Timer1B.CS12 = 1;
-        } else if (pTIMER->Timer_Start_Prescalar == CLK_1024_PRESCALING) {
-            pTCCR1B->Timer1B.CS10 = 1;
-            pTCCR1B->Timer1B.CS11 = 0;
-            pTCCR1B->Timer1B.CS12 = 1;
-        } /* End of Choosing the Pre-scaler */
-
     }
-
 }
 
 void TIM0_Init(void) {
-    TIMER_Init(&S_TIMER0);
+    TIMER_Channel(&S_TIMER0);
+    TIMER_pwmMode(&S_TIMER0);
+    TIMER_Prescaler(&S_TIMER0);
 }
 
 void TIM2_Init(void) {
-    TIMER_Init(&S_TIMER2);
+    TIMER_Channel(&S_TIMER0);
+    TIMER_NormalMode(&S_TIMER0);
+    TIMER_Prescaler(&S_TIMER0);
 }
 
 void TIM1_Init(void) {
-    TIMER_Init(&S_TIMER1);
+    TIMER_Channel(&S_TIMER0);
+    TIMER_NormalMode(&S_TIMER0);
+    TIMER_Prescaler(&S_TIMER0);
 }
 
 void TIM0_Start(void) {
@@ -274,7 +279,6 @@ void delay_s(float Time_delay_s) {
             pTIFR->TIFR_Reg.TOV0 = 1;
             overflow_counter++;
         }
-
         overflow_counter = 0;
         TIM0_Stop();
     } else {
@@ -286,12 +290,9 @@ void delay_s(float Time_delay_s) {
             pTIFR->TIFR_Reg.TOV0 = 1;
             overflow_counter++;
         }
-
         overflow_counter = 0;
         TIM0_Stop();
-
     }
-
 }
 
 void PWM_Start(uint8_t dutyCycle) {

@@ -7,13 +7,13 @@ void Ultra_Trig_Init(uint8_t portName, uint8_t pinNumber) {
     DIO_Init_Pin(portName, pinNumber, OUT);
 }
 
-void Ultra_Echo_Init(uint8_t portName, uint8_t pinNumber) {
-    DIO_Init_Pin(portName, pinNumber, IN);
+void Ultra_Echo_Init() {
+    DIO_Init_Pin('D', 6, IN);
 }
 
 void Ultra_Init(void) {
-    Ultra_Trig_Init('C', 4);
-    Ultra_Echo_Init('D', 6);
+    Ultra_Trig_Init('D', 0);
+    Ultra_Echo_Init();
     TIM1_Init();
 }
 

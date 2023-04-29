@@ -10,6 +10,8 @@
 #include "DIO.h"
 #include "TIMER.h"
 #include "ADC.h"
+#include "ULTRASONIC.h"
+#include "LINE_TRACKER.h"
 
 /**********************MOTORS_Init****************************
  * Description: This function is used to initialize all motors
@@ -22,13 +24,13 @@
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Init****************************/
-void MOTORS_Init(void);
-void MOTOR1_Init(void);
-void MOTOR2_Init(void);
-void MOTOR3_Init(void);
-void MOTOR4_Init(void);
-void MOTORS_Left_Init(void);
-void MOTORS_Right_Init(void);
+void motor1Init(void);
+void motor2Init(void);
+void motor3Init(void);
+void motor4Init(void);
+void leftmotorsInit(void);
+void rightmotorsInit(void);
+void motorsInit(void);
 /*_____________________________________________________________*/
 
 /**********************MOTORS_Clkwise**********************************
@@ -42,13 +44,13 @@ void MOTORS_Right_Init(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Clkwise***********************************/
-void MOTORS_Clkwise (void);
-void MOTOR1_Clkwise(void);
-void MOTOR2_Clkwise(void);
-void MOTOR3_Clkwise(void);
-void MOTOR4_Clkwise(void);
-void MOTORS_Left_Clkwise(void);
-void MOTORS_Right_Clkwise(void);
+void motor1Forward(void);
+void motor2Forward(void);
+void motor3Forward(void);
+void motor4Forward(void);
+void leftmotorsForward(void);
+void rightmotorsForward(void);
+void motorsForward (void);
 /*_______________________________________________________________________*/
 
 /**********************MOTORS_Anticlkwise**********************************
@@ -62,13 +64,13 @@ void MOTORS_Right_Clkwise(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Anticlkwise***********************************/
-void MOTORS_Anticlkwise (void);
-void MOTOR1_Anticlkwise(void);
-void MOTOR2_Anticlkwise(void);
-void MOTOR3_Anticlkwise(void);
-void MOTOR4_Anticlkwise(void);
-void MOTORS_Left_Anticlkwise(void);
-void MOTORS_Right_Anticlkwise(void);
+void motor1Backward (void);
+void motor2Backward(void);
+void motor3Backward(void);
+void motor4Backward(void);
+void leftmotorsBackward(void);
+void rightmotorsBackward(void);
+void motorsBackward(void);
 /*_________________________________________________________________________*/
 
 /**********************MOTORS_Stop**********************************
@@ -80,13 +82,14 @@ void MOTORS_Right_Anticlkwise(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Stop***********************************/
-void MOTORS_Stop(void);
-void MOTOR1_Stop(void);
-void MOTOR2_Stop(void);
-void MOTOR3_Stop(void);
-void MOTOR4_Stop(void);
-void MOTORS_Left_Stop(void);
-void MOTORS_Right_Stop(void);
+void motor1Stop(void);
+void motor2Stop(void);
+void motor3Stop(void);
+void motor4Stop(void);
+void leftmotorsStop(void);
+void rightmotorsStop(void);
+void motorsStop(void);
+void Stop(void);
 /*_________________________________________________________________________*/
 
 /**********************Move_Forward**********************************
@@ -97,7 +100,7 @@ void MOTORS_Right_Stop(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************Move_Forward***********************************/
-void Move_Forward(void);
+void moveForward(void);
 /*_________________________________________________________________________*/
 
 /**********************Move_Backward**********************************
@@ -108,7 +111,7 @@ void Move_Forward(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************Move_Backward***********************************/
-void Move_Backward(void);
+void moveBackward(void);
 /*_________________________________________________________________________*/
 
 /**********************Move_Right**********************************
@@ -122,7 +125,8 @@ void Move_Backward(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************Move_Right***********************************/
-void Move_Right(void);
+void moveForwardRight(void);
+void moveBackwardRight(void);
 /*_________________________________________________________________________*/
 
 /**********************Move_Left**********************************
@@ -136,7 +140,8 @@ void Move_Right(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************Move_Left***********************************/
-void Move_Left(void);
+void moveForwardLeft(void);
+void moveBackwardLeft(void);
 /*_________________________________________________________________________*/
 
 /**********************MOTOR_Speed**********************************
