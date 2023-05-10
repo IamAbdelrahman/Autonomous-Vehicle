@@ -8,6 +8,7 @@
 #ifndef REGISTERS_H_
 #define REGISTERS_H_
 #include "Macros.h"
+#include <avr/delay.h>
 /* PORT A Registers */
 #define PORTA   *((vuint8_t*)0x3B)	
 #define DDRA    *((vuint8_t*)0x3A)	
@@ -58,7 +59,9 @@
 
 // TIMER1 - Registers
 #define TCCR1A      0x4F
+#define TCCR1A_Reg  *((vuint8_t*)0x4F)
 #define TCCR1B      0x4E
+#define TCCR1B_Reg  *((vuint8_t*)0x4E)
 #define TCNT1H      *((vuint8_t*)0x4D)
 #define TCNT1L      *((vuint8_t*)0x4C)
 #define OCR1AH      *((vuint8_t*)0x4B)

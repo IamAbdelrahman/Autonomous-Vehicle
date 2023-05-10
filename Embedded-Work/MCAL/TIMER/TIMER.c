@@ -11,7 +11,7 @@
 // Global Structures and Pointers
 ST_TIMER_config_t S_TIMER0 = {TIMER0, PWM_MODE_FAST_NON_INVERTED, CLK_1024_PRESCALING};
 ST_TIMER_config_t S_TIMER2 = {TIMER2, NORMAL_MODE, CLK_1024_PRESCALING};
-ST_TIMER_config_t S_TIMER1 = {TIMER1, NORMAL_MODE, CLK_NO_PRESCALING};
+ST_TIMER_config_t S_TIMER1 = {TIMER1, NORMAL_MODE, CLK_8_PRESCALING};
 
 volatile U_TCCR0_t* const pTCCR0 = ADDRESS_TCCR0;
 volatile U_TCCR2_t* const pTCCR2 = ADDRESS_TCCR2;
@@ -114,7 +114,7 @@ void TIMER_pwmMode(ST_TIMER_config_t* pTIMER) {
     }
 }
 
-void TIMER_Prescaler(ST_TIMER_config_t* pTIMER) {
+void TIMER_Start(ST_TIMER_config_t* pTIMER) {
     if (pTIMER->Timer_Channel == TIMER0) {
         if (pTIMER->Timer_Start_Prescalar == NO_CLK_SRC)
             pTCCR0->All_Bits = 0x00;
@@ -195,32 +195,32 @@ void TIMER_Prescaler(ST_TIMER_config_t* pTIMER) {
 void TIM0_Init(void) {
     TIMER_Channel(&S_TIMER0);
     TIMER_pwmMode(&S_TIMER0);
-    TIMER_Prescaler(&S_TIMER0);
+    TIMER_Start(&S_TIMER0);
 }
 
 void TIM2_Init(void) {
-    TIMER_Channel(&S_TIMER0);
-    TIMER_NormalMode(&S_TIMER0);
-    TIMER_Prescaler(&S_TIMER0);
+    TIMER_Channel(&S_TIMER2);
+    TIMER_NormalMode(&S_TIMER2);
+    TIMER_Start(&S_TIMER2);
 }
 
 void TIM1_Init(void) {
-    TIMER_Channel(&S_TIMER0);
-    TIMER_NormalMode(&S_TIMER0);
-    TIMER_Prescaler(&S_TIMER0);
+    TIMER_Channel(&S_TIMER1);
+    TIMER_NormalMode(&S_TIMER1);
+    TIMER_Start(&S_TIMER1);
 }
 
-void TIM0_Start(void) {
+void TIM0_Set(void) {
     TCNT0 = 0X00;
 }
 
-void TIM2_Start(void) {
+void TIM2_Set(void) {
     TCNT2 = 0X00;
 }
 
-void TIM1_Start(void) {
-    TCNT1H = 0;
-    TCNT1L = 0;
+void TIM1_Set(void) {
+    TCNT1H = 0x00;
+    TCNT1L = 0x00;
 }
 
 void TIMER_Stop(ST_TIMER_config_t* pTIMER) {
@@ -339,4 +339,8 @@ void TIM1_Reset() {
 
 void TIM2_Reset() {
     TIMER_Reset(&S_TIMER2);
+}
+
+void enableTIM1OvfInterrupt() {
+    SET_BIT(TIMSK, TOIE1);
 }

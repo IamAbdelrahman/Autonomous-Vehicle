@@ -3,8 +3,8 @@ void LCD_Command(unsigned char cmnd)
 {
 	LCD_Data_Port= cmnd;
 	LCD_Command_Port &= ~(1<<0);	/* RS=0 command reg. */
-	LCD_Command_Port &= ~(1<<1);	/* RW=0 Write operation */
-	LCD_Command_Port |= (1<<2);	/* Enable pulse */
+	//LCD_Command_Port &= ~(1<<1);	/* RW=0 Write operation */
+	LCD_Command_Port |= (1<<EN);	/* Enable pulse */
 	_delay_us(1);
 	LCD_Command_Port &= ~(1<<EN);
 	_delay_ms(3);
@@ -14,11 +14,20 @@ void LCD_Char (unsigned char char_data)	/* LCD data write function */
 {
 	LCD_Data_Port= char_data;
 	LCD_Command_Port |= (1<<RS);	/* RS=1 Data reg. */
-	LCD_Command_Port &= ~(1<<RW);	/* RW=0 write operation */
+	//LCD_Command_Port &= ~(1<<RW);	/* RW=0 write operation */
 	LCD_Command_Port |= (1<<EN);	/* Enable Pulse */
 	_delay_us(1);
 	LCD_Command_Port &= ~(1<<EN);
 	_delay_ms(1);
+    // wait 200 microseconds
+	_delay_us(200);
+	
+	// send the lower 4 bit of the data
+	LCD_Command_Port = (LCD_Command_Port & 0x0F) | (char_data << 4);
+	LCD_Command_Port |= (1<<EN);
+	_delay_us(1);
+	LCD_Command_Port &= ~ (1<<EN);
+	_delay_ms(2);
 }
 
 void LCD_Init (void)			/* LCD Initialize function */
@@ -27,11 +36,16 @@ void LCD_Init (void)			/* LCD Initialize function */
 	LCD_Data_Dir = 0xFF;		/* Make LCD data port direction as o/p */
 	_delay_ms(20);			/* LCD Power ON delay always >15ms */
 	
-	LCD_Command (0x38);		/* Initialization of 16X2 LCD in 8bit mode */
-	LCD_Command (0x0C);		/* Display ON Cursor OFF */
-	LCD_Command (0x06);		/* Auto Increment cursor */
-	LCD_Command (0x01);		/* Clear display */
-	LCD_Command (0x80);		/* Cursor at home position */
+//	LCD_Command (0x38);		/* Initialization of 16X2 LCD in 8bit mode */
+//	LCD_Command (0x0C);		/* Display ON Cursor OFF */
+//	LCD_Command (0x06);		/* Auto Increment cursor */
+//	LCD_Command (0x01);		/* Clear display */
+//	LCD_Command (0x80);		/* Cursor at home position */
+    LCD_Command(0x02);       // this command returns the cursor to the first row and first column position
+	LCD_Command(0x28);       
+	LCD_Command(0x0c);
+	LCD_Command(0x06);
+	LCD_Command(0x01);
 }
 
 void LCD_String (char *str)		/* Send string to LCD function */
@@ -43,7 +57,7 @@ void LCD_String (char *str)		/* Send string to LCD function */
 	}
 }
 
-void LCD_String_xy (char row, char pos, char *str)/* Send string to LCD with xy position */
+    void LCD_String_xy (char row, char pos, char *str)/* Send string to LCD with xy position */
 {
 	if (row == 0 && pos<16)
 	LCD_Command((pos & 0x0F)|0x80);	/* Command of first row and required position<16 */

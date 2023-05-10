@@ -13,6 +13,50 @@
 #include "ULTRASONIC.h"
 #include "LINE_TRACKER.h"
 
+typedef enum {
+    MOTOR1,
+    MOTOR2,
+    MOTOR3,
+    MOTOR4,
+    LEFT_MOTORS,
+    RIGHT_MOTORS,
+    MOTORS,
+}EN_motor_t;
+
+typedef enum {
+    LEFT_MOTORS_FORWARD,
+    RIGHT_MOTORS_FORWARD,
+    MOTORS_FORWARD,
+    LEFT_MOTORS_BACKWARD,
+    RIGHT_MOTORS_BACKWARD,
+    MOTORS_BACKWARD,
+    LEFT_MOTORS_STOP,
+    RIGHT_MOTORS_STOP,
+    STOP,
+}EN_motorsState_t;
+
+typedef enum {
+    MOVE_FORWARD,
+    MOVE_BACKWARD,
+    MOVE_FORWARD_RIGHT,
+    MOVE_FORWARD_LEFT,
+    MOVE_BACKWARD_RIGHT,
+    MOVE_BACKWARD_LEFT,
+    TURN_FORWARD_RIGHT,
+    TURN_FORWARD_LEFT,
+    TURN_BACKWARD_RIGHT,
+    TURN_BACKWARD_LEFT,
+    TURN_AROUND_FORWARD_RIGHT,
+    TURN_AROUND_FORWARD_LEFT,
+    TURN_AROUND_BACKWARD_RIGHT,
+    TURN_AROUND_BACKWARD_LEFT,
+
+} EN_directions_t;
+
+#define TURN_90     _delay_ms(750)
+#define TURN_180    _delay_ms(1500)
+#define TURN_270    _delay_ms(2250)
+#define TURN_360    _delay_ms(3000)
 /**********************MOTORS_Init****************************
  * Description: This function is used to initialize all motors
  * thorough initializing all the bits connected to the motors
@@ -24,13 +68,7 @@
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Init****************************/
-void motor1Init(void);
-void motor2Init(void);
-void motor3Init(void);
-void motor4Init(void);
-void leftmotorsInit(void);
-void rightmotorsInit(void);
-void motorsInit(void);
+void motorsInit(EN_motor_t);
 /*_____________________________________________________________*/
 
 /**********************MOTORS_Clkwise**********************************
@@ -44,13 +82,7 @@ void motorsInit(void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Clkwise***********************************/
-void motor1Forward(void);
-void motor2Forward(void);
-void motor3Forward(void);
-void motor4Forward(void);
-void leftmotorsForward(void);
-void rightmotorsForward(void);
-void motorsForward (void);
+void motorsState(EN_motorsState_t);
 /*_______________________________________________________________________*/
 
 /**********************MOTORS_Anticlkwise**********************************
@@ -64,84 +96,30 @@ void motorsForward (void);
  * Input: It takes nothing like all the functions inside it
  * Return: It returns void
  **********************MOTORS_Anticlkwise***********************************/
-void motor1Backward (void);
-void motor2Backward(void);
-void motor3Backward(void);
-void motor4Backward(void);
-void leftmotorsBackward(void);
-void rightmotorsBackward(void);
-void motorsBackward(void);
+void moveCar(EN_directions_t direction);
+void rotateCar(EN_directions_t direction, uint64_t degreeValue);
+void stopAtDistance(float distance_cm) ;
+uint8_t detectBlackLine();
+void goToRoom1();
+void goToRoom2();
+void goToRoom3();
+void goToRoom1_2();
+void goToRoom1_2_3();
+void goToRoom1_2_3();
+ void degree(uint64_t deg);
 /*_________________________________________________________________________*/
 
-/**********************MOTORS_Stop**********************************
- * Description: This function is used to stop all motors through
- * clearing all the bits connected to them and this occurs by
- * calling MOTOR1_Stop(), MOTOR2_Stop(), MOTOR3_Stop()
- * , and MOTOR4_Stop() functions.
- * 
- * Input: It takes nothing like all the functions inside it
- * Return: It returns void
- **********************MOTORS_Stop***********************************/
-void motor1Stop(void);
-void motor2Stop(void);
-void motor3Stop(void);
-void motor4Stop(void);
-void leftmotorsStop(void);
-void rightmotorsStop(void);
-void motorsStop(void);
-void Stop(void);
-/*_________________________________________________________________________*/
 
-/**********************Move_Forward**********************************
- * Description: This function is used to move the car in the forward
- * direction through calling the MOTORS_Anticlkwise() function
- * #Assuming : This direction is fixed with respect to the path
+/**********************MOTOR_Speed**********************************
+ * Description: This function is used to control the speed of the 
+ * motors by sending the value from 0:100 and this value is sent
+ * to the pwm_start() function that takes the same range to calculate
+ * the value of OCR0.
  * 
- * Input: It takes nothing like all the functions inside it
+ * Input: It takes unsigned character speed.
  * Return: It returns void
- **********************Move_Forward***********************************/
-void moveForward(void);
-/*_________________________________________________________________________*/
-
-/**********************Move_Backward**********************************
- * Description: This function is used to move the car in the backward
- * direction through calling the MOTORS_Clkwise() function
- * #Assuming : This direction is fixed with respect to the path
- * 
- * Input: It takes nothing like all the functions inside it
- * Return: It returns void
- **********************Move_Backward***********************************/
-void moveBackward(void);
-/*_________________________________________________________________________*/
-
-/**********************Move_Right**********************************
- * Description: This function is used to turn the car right
- * through moving only the left motors anticlokwise and stopping
- * the right motors and this occurs by calling the MOTOR1_Stop() and
- * MOTOR2_Stop() in addition that calling the MOTOR3_Anticlkwise() and
- * MOTOR4_Anticlkwise().
- * #Assuming : This direction is fixed with respect to the path
- * 
- * Input: It takes nothing like all the functions inside it
- * Return: It returns void
- **********************Move_Right***********************************/
-void moveForwardRight(void);
-void moveBackwardRight(void);
-/*_________________________________________________________________________*/
-
-/**********************Move_Left**********************************
- * Description: This function is used to turn the car left
- * through moving only the right motors anticlokwise and stopping
- * the left motors and this occurs by calling the MOTOR3_Stop() and
- * MOTOR4_Stop() in addition that calling the MOTOR1_Anticlkwise() and
- * MOTOR2_Anticlkwise().
- * #Assuming : This direction is fixed with respect to the path
- * 
- * Input: It takes nothing like all the functions inside it
- * Return: It returns void
- **********************Move_Left***********************************/
-void moveForwardLeft(void);
-void moveBackwardLeft(void);
+ **********************MOTOR_Speed***********************************/
+void motorSpeed(uint8_t speed);
 /*_________________________________________________________________________*/
 
 /**********************MOTOR_Speed**********************************
@@ -153,7 +131,8 @@ void moveBackwardLeft(void);
  * Input: It takes unsigned character speed.
  * Return: It returns void
  **********************MOTOR_Speed***********************************/
-void MOTOR_Speed(uint8_t speed);
+
 /*_________________________________________________________________________*/
+
 
 #endif	/* MOTOR_H */

@@ -83,6 +83,7 @@ void UART_Init(uint16_t Baud_Rate) {
     UART_Data_Size(&S_UART);
     UART_Parity(&S_UART);
     UART_Stop_Bit(&S_UART);
+    UART_Speed(&S_UART);
 }
 
 void UART_TransmitChar(uint8_t data) {
@@ -92,7 +93,7 @@ void UART_TransmitChar(uint8_t data) {
     UDR = data;
 }
 
-uint16_t UART_ReceiveChar(void) {
+uint8_t UART_ReceiveChar(void) {
     /* Wait for data to be received */
     while (pUCSRA->Ucsra.RXC == 0);
     /* Get and return received data from buffer */
@@ -108,13 +109,39 @@ void UART_TransmitString(uint8_t *str) {
     }
 }
 
-uint8_t* UART_ReceiveString(void) {
+void UART_ReceiveString(uint8_t* str) {
     uint8_t Char = 0;
-    uint8_t *String;
-    while (String[Char] != '\0') {
-        String[Char] = UART_ReceiveChar();
-        Char++;
-
+    uint8_t i = 0;
+    str[i] = UART_ReceiveChar();
+    while (str[i] != '#'){
+        i++;
+        str[i] = UART_ReceiveChar();        
     }
-    return (String);
+    str[i] = '\0';
+}
+
+uint64_t stringCompare (uint8_t* arr1, uint8_t* arr2) {
+    uint64_t flag = 0;
+    uint8_t i = 0;
+    while (arr2[i] != '#') {
+        if (arr1[i] == arr2[i])
+            flag = 1;
+        else 
+            flag = 0;
+        i++;          
+    }
+    return flag; 
+}
+
+void enableUartRxInterrupt(){
+    pUCSRB->Ucsrb.RXCIE = 1;
+}
+void disableUartRxInterrupt(){
+    pUCSRB->Ucsrb.RXCIE = 0;
+}
+void enableUartTxInterrupt(){
+    pUCSRB->Ucsrb.TXCIE = 1;
+}
+void disableUartTxInterrupt(){
+    pUCSRB->Ucsrb.TXCIE = 0;
 }

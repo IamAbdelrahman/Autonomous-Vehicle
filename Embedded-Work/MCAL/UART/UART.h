@@ -182,7 +182,7 @@ void UART_TransmitChar(uint8_t data);
  * Input : It takes an unsigned character to store the data sent.
  * Return: It returns nothing.
  ******************************UART_ReceiveChar()************************************/
-uint16_t UART_ReceiveChar(void);
+uint8_t UART_ReceiveChar(void);
 /*___________________________________________________________________________________*/
 
 /******************************UART_TransmitString()**********************************
@@ -200,7 +200,8 @@ void UART_TransmitString(uint8_t *str);
  * Input : It takes void
  * Return: It returns pointer to character.
  ******************************UART_ReceiveString()************************************/
-uint8_t* UART_ReceiveString(void);
+void UART_ReceiveString(uint8_t* str);
+uint64_t stringCompare (uint8_t* arr1, uint8_t* arr2);
 /*___________________________________________________________________________________*/
 
 #endif	/* UART_H */

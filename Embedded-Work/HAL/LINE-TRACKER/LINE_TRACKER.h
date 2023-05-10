@@ -20,7 +20,7 @@
  * Input: It takes portName and pinNumber
  * Return: It returns void
  **********************lineTracker_Init****************************/
-void lineTracker_Init(uint8_t portName, uint8_t pinNumber);
+void lineTrackerInit(uint8_t portName, uint8_t pinNumber);
 /*__________________________________________________________*/
 
 /**********************lineTracker_Read****************************
@@ -34,7 +34,7 @@ void lineTracker_Init(uint8_t portName, uint8_t pinNumber);
  * Input: It takes portName and pinNumber and pointer 'state'
  * Return: It returns nothing
  **********************lineTracker_Read****************************/
-void lineTracker_Read(uint8_t portName, uint8_t pinNumber, uint8_t* State);
+void lineTrackerRead(uint8_t portName, uint8_t pinNumber, uint8_t* State);
 /*__________________________________________________________*/
 
 #endif	/* IR_H */

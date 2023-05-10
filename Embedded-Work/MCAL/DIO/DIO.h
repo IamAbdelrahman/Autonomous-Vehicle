@@ -9,8 +9,7 @@
 #define	DIO_H
 
 #include "Registers.h"
-#include "Platform_Types.h"
-#include <avr/delay.h>
+
 typedef struct{
    
         vuint8_t pin0 : 1;
