@@ -12,22 +12,21 @@ void DCMotor_init() {
   pinMode(motorPin1, OUTPUT);
   pinMode(motorPin2, OUTPUT);
   pinMode(motorPin3, OUTPUT);
-  pinMode(motorPin4, OUTPUT); 
+  pinMode(motorPin4, OUTPUT);
   pinMode(pwmPinA, OUTPUT);
   pinMode(pwmPinB, OUTPUT);
-  
 }
 
-void DCMotor_setSpeed(){
-  analogWrite(pwmPinA, 175);
-  analogWrite(pwmPinB, 175);
+void DCMotor_setSpeed(int speed) {
+  analogWrite(pwmPinA, speed);
+  analogWrite(pwmPinB, speed);
 }
 
 void DCMotor_stop() {
   digitalWrite(motorPin1, LOW);
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, LOW);
-  digitalWrite(motorPin4, LOW);  
+  digitalWrite(motorPin4, LOW);
   analogWrite(pwmPinA, 0);
   analogWrite(pwmPinB, 0);
 }
@@ -37,8 +36,7 @@ void DCMotor_forward() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, LOW);
-  
-  DCMotor_setSpeed();
+  DCMotor_setSpeed(125);
 }
 
 void DCMotor_backward() {
@@ -46,46 +44,49 @@ void DCMotor_backward() {
   digitalWrite(motorPin2, HIGH);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, HIGH);
-  
-  DCMotor_setSpeed();
+  DCMotor_setSpeed(125);
+}
+
+void DCMotor_left() {
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, LOW);
+  DCMotor_setSpeed(125);
 }
 
 void DCMotor_right() {
   digitalWrite(motorPin1, LOW);
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
-  digitalWrite(motorPin4, HIGH);
-  
-  DCMotor_setSpeed();
-}
-void DCMotor_left() {
-  digitalWrite(motorPin1, HIGH);
-  digitalWrite(motorPin2, HIGH);
-  digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, LOW);
-  
-  DCMotor_setSpeed();
+  DCMotor_setSpeed(125);
 }
+
 void DCMotor_turnRight() {
   DCMotor_right();
   delay(750);
+  DCMotor_stop();
 }
+
 void DCMotor_turnLeft() {
   DCMotor_left();
   delay(750);
+  DCMotor_stop();
 }
 
 void DCMotor_turnAround() {
   DCMotor_right();
   delay(1500);
+  DCMotor_stop();
 }
 
 void stopAtDistance(int distance_cm) {
-    int d = Ultrasonic_read();
-    if (d <= distance_cm)
-        DCMotor_stop();
-    else 
-    {;}
+  int d = Ultrasonic_read();
+  if (d <= distance_cm) {
+    DCMotor_stop();
+    delay(2000);
+  }
 }
 
 void detectLine() {
@@ -114,7 +115,7 @@ void goToRoom2() {
 void goToRoom3() {
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
 }
 
 void goToRoom1_2() {
@@ -145,11 +146,12 @@ void goToRoom1_2_3() {
 
 void returnFrom1() {
   DCMotor_turnAround();
+  DCMotor_stop();
+  delay(1000);
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   DCMotor_turnAround();
 }
-
 void returnFrom2() {
   DCMotor_turnRight();
   DCMotor_forward();
