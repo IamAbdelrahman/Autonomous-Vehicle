@@ -8,8 +8,8 @@ const int motorPin1 = 2;    // Motor 1 control pin
 const int motorPin2 = 3;    // Motor 2 control pin
 const int motorPin3 = 4;    // Motor 3 control pin
 const int motorPin4 = 5;    // Motor 4 control pin
-const int pwmPinA = 9;      // PWM pin A (controls motors 1 and 2 >> right motors)
-const int pwmPinB = 10;     // PWM pin B (controls motors 3 and 4 >> left motors)
+const int pwmPinA = 9;      // PWM pin A (controls motors 1 and 2 >> right motors (OUT1-OUT2)
+const int pwmPinB = 10;     // PWM pin B (controls motors 3 and 4 >> left motors) (OUT3-OUT4)
 
 // Ultrasonic sensor pins
 const int trigPin = 6;
@@ -18,7 +18,7 @@ long duration;
 int distance;
 
 // LineTracker sensor pin
-int sensorPin = 12;
+int lineTrackerPin = 8;
 
 // Global variables
 char receivedChar ;
@@ -43,6 +43,7 @@ void loop() {
     }
   }
 }
+
 
 void Ultrasonic_init() {
   Serial.begin(9600);
@@ -70,12 +71,12 @@ void Display_distance() {
 
 void LineTracker_init()
 {
-  pinMode (sensorPin, INPUT) ;
+  pinMode (lineTrackerPin, INPUT) ;
 }
 
 bool LineTracker_read() {
 
-  bool val = digitalRead(sensorPin);
+  bool val = digitalRead(lineTrackerPin);
   return val;
 }
 
@@ -115,7 +116,7 @@ void DCMotor_forward() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(255);
+  DCMotor_setSpeed(75);
 }
 
 void DCMotor_backward() {
@@ -123,7 +124,7 @@ void DCMotor_backward() {
   digitalWrite(motorPin2, HIGH);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, HIGH);
-  DCMotor_setSpeed(255);
+  DCMotor_setSpeed(75);
 }
 
 void DCMotor_left() {
@@ -131,7 +132,7 @@ void DCMotor_left() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(255);
+  DCMotor_setSpeed(75);
 }
 
 void DCMotor_right() {
@@ -139,7 +140,7 @@ void DCMotor_right() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(255);
+  DCMotor_setSpeed(75);
 }
 
 void DCMotor_turnRight() {
@@ -147,6 +148,7 @@ void DCMotor_turnRight() {
   delay(750);
   DCMotor_stop();
 }
+
 void DCMotor_turnLeft() {
   DCMotor_left();
   delay(750);
@@ -160,7 +162,7 @@ void DCMotor_turnAround() {
 }
 
 void stopAtDistance(int distance_cm) {
-  int d = 100;
+  int d = -1;
   do {
     d = Ultrasonic_read();
   }
@@ -175,13 +177,13 @@ void detectLine() {
 void from1to2() {
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(20);
+  stopAtDistance(10);
   DCMotor_turnLeft();
   DCMotor_forward();
-  stopAtDistance(20);
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
+ //DCMotor_turnRight();
+  //DCMotor_forward();
+  //stopAtDistance(10);
 }
 
 void from1to3() {
@@ -190,35 +192,35 @@ void from1to3() {
 }
 
 void from2to1() {
-  DCMotor_turnAround();
+  //DCMotor_turnAround();
   DCMotor_turnLeft();
   DCMotor_forward();
-  stopAtDistance(20);
-  DCMotor_turnRight();
-  DCMotor_forward();
   stopAtDistance(10);
   DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(10);
+  //DCMotor_turnRight();
+  //DCMotor_forward();
+  //stopAtDistance(10);
 }
 
 void from2to3() {
-  DCMotor_turnRight();
+  DCMotor_turnAround();
   DCMotor_forward();
   stopAtDistance(10);
-  DCMotor_turnLeft();
-  DCMotor_forward();
-  stopAtDistance(10);
+  //DCMotor_turnLeft();
+  //DCMotor_forward();
+  //stopAtDistance(10);
 }
 
 void from3to2 () {
   DCMotor_turnAround();
-  DCMotor_turnRight();
+  //DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(10);
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(10);
+ // DCMotor_turnRight();
+  //DCMotor_forward();
+  //stopAtDistance(10);
 }
 
 void from3to1 () {
@@ -245,10 +247,18 @@ void fromStartto2() {
   stopAtDistance(10);
 }
 
+/*void fromStartto2() {
+  fromStartto1();
+  from1to2();
+}
+*/
 void fromStartto3() {
   DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(5);
+  //DCMotor_turnRight();
+  //DCMotor_forward();
+  //stopAtDistance(5); 
 }
 
 
@@ -260,7 +270,7 @@ void returnFrom1() {
 }
 
 void returnFrom2() {
-  DCMotor_turnRight();
+ /* DCMotor_turnRight();
   DCMotor_forward();
   detectLine();
   DCMotor_turnRight();
@@ -270,13 +280,17 @@ void returnFrom2() {
   DCMotor_forward();
   stopAtDistance(10);
   DCMotor_turnAround();
+  */
+
+  from2to1();
+  returnFrom1();
 }
 
 void returnFrom3() {
   DCMotor_turnAround();
   DCMotor_forward();
   stopAtDistance(10);
-  DCMotor_turnRight();
+  DCMotor_turnRight();  
 }
 
 void goToRoom1() {
@@ -299,7 +313,6 @@ void goToRoom1() {
     default:
       break;
   }
-
 }
 
 void goToRoom2() {
@@ -341,7 +354,6 @@ void goToRoom3() {
       positionOfCar = 3;
       break;
   }
-
 }
 
 void goToStart () {
@@ -383,12 +395,6 @@ void freeControlMode (char receivedChar) {
     DCMotor_stop();
     break;
 
-    case 'r':
-    DCMotor_stop();
-    mode = 'r';
-    BTSerial.write("Welcome to Room-Mode\n");
-    break;
-
     case '0':
     positionOfCar = 0;
     break;
@@ -404,13 +410,14 @@ void freeControlMode (char receivedChar) {
     case '3':
     positionOfCar = 3;
     break;
-  }
- 
-  else if (receivedChar == '0') {
-    positionOfCar = 0;
-  }
+    
+    case 'r':
+    DCMotor_stop();
+    mode = 'r';
+    BTSerial.write("Welcome to Room-Mode\n");
+    break;
 
-  
+  }   
 }
 
 void roomMode (char data) {
@@ -426,14 +433,15 @@ void roomMode (char data) {
     case '3':
       goToRoom3();
       break;
-    case '4':
+      
+    case '0':
       goToStart();
       break;
       
     case 'f':
-      mode = 'f';
-      
+      mode = 'f';   
       break;
+      
     default:
       break;
   }
