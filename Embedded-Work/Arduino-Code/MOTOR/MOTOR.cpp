@@ -81,90 +81,200 @@ void DCMotor_turnAround() {
 }
 
 void stopAtDistance(int distance_cm) {
-    int d = Ultrasonic_read();
-    if (d <= distance_cm)
-        DCMotor_stop();
-    else 
-    {;}
+  int d = 100;
+  do {
+    d = Ultrasonic_read();
+  }
+  while (d >= distance_cm);
+  DCMotor_stop();
 }
 
 void detectLine() {
-  if (LineTracker_read())
-    DCMotor_turnRight();
+  while (!LineTracker_read());
 }
 
-void goToRoom1() {
+void from1to2() {
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(10);
+  DCMotor_turnLeft();
+  DCMotor_forward();
+  stopAtDistance(5);
+  DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(10);
 }
 
-void goToRoom2() {
+void from1to3() {
+  from1to2();
+  from2to3();
+}
+
+void from2to1() {
+  DCMotor_turnAround();
+  DCMotor_turnLeft();
+  DCMotor_forward();
+  stopAtDistance(5);
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(5);
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(10);
+}
+
+void from2to3() {
+  DCMotor_turnAround();
+  DCMotor_forward();
+  stopAtDistance(5);
+  DCMotor_turnLeft();
+  DCMotor_forward();
+  stopAtDistance(10);
+}
+
+void from3to2 () {
+  DCMotor_turnAround();
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(5);
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(10);
+}
+
+void from3to1 () {
+  from3to2();
+  from2to1();
+}
+
+void fromStartto1() {
+  DCMotor_forward();
+  stopAtDistance(5);
+}
+
+void fromStartto2() {
   DCMotor_forward();
   detectLine();
+  DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(20);
+  stopAtDistance(5);
   DCMotor_turnLeft();
   DCMotor_forward();
-  stopAtDistance(20);
+  stopAtDistance(5);
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
 }
 
-void goToRoom3() {
+void fromStartto3() {
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
+  DCMotor_turnRight();
+  DCMotor_forward();
+  stopAtDistance(5); 
 }
 
-void goToRoom1_2() {
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(20);
-  DCMotor_turnLeft();
-  DCMotor_forward();
-  stopAtDistance(20);
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(10);
-}
-
-void goToRoom2_3() {
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(20);
-  DCMotor_turnLeft();
-  DCMotor_forward();
-  stopAtDistance(10);
-}
-
-void goToRoom1_2_3() {
-  goToRoom1_2();
-  goToRoom2_3();
-}
 
 void returnFrom1() {
   DCMotor_turnAround();
+  DCMotor_turnRight();
+  DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   DCMotor_turnAround();
 }
 
 void returnFrom2() {
+  from2to1();
+  returnFrom1();
+}
+
+void returnFrom3() {
   DCMotor_turnRight();
-  DCMotor_forward();
-  detectLine();
   DCMotor_forward();
   stopAtDistance(10);
   DCMotor_turnLeft();
-  DCMotor_forward();
   stopAtDistance(10);
   DCMotor_turnAround();
 }
 
-void returnFrom3() {
-  DCMotor_turnAround();
-  DCMotor_forward();
-  stopAtDistance(10);
-  DCMotor_turnRight();
+void goToRoom1() {
+  switch (positionOfCar) {
+    case 0: // To go from start to room 1
+      fromStartto1();
+      positionOfCar = 1;
+      break;
+      
+    case 2: // To go from room 2 to room 1
+      from2to1();
+      positionOfCar = 1;
+      break;
+      
+    case 3: // To go from room 3 to room 1
+      from3to1();
+      positionOfCar = 1;
+      break;
+      
+    default:
+      break;
+  }
+}
+
+void goToRoom2() {
+  switch (positionOfCar) {
+    case 0: // To go from start to room 2
+      fromStartto2();
+      positionOfCar = 2;
+      break;
+      
+    case 1: // To go from room 1 to room 2
+      from1to2();
+      positionOfCar = 2;
+      break;
+      
+    case 3: // To go from room 3 to room 2
+      from3to2();
+      positionOfCar = 2;
+      break;
+      
+    default:
+      break;
+  }
+}
+
+void goToRoom3() {
+  switch (positionOfCar) {
+    case 0: // To go from start to room 3
+      fromStartto3();
+      positionOfCar = 3;     
+      break;
+      
+    case 1: // To go from room 1 to room 3
+      from1to3();
+      positionOfCar = 3;
+      break;
+      
+    case 2: // To go from room 2 to room 3
+      from2to3();
+      positionOfCar = 3;
+      break;
+  }
+}
+
+void goToStart () {
+  switch (positionOfCar) {
+    case 1:
+      returnFrom1();
+      break;
+    case 2:
+      returnFrom2();
+      break;
+    case 3:
+      returnFrom3();
+      break;
+    default:
+      break;
+  }
+  positionOfCar = 0;
 }
