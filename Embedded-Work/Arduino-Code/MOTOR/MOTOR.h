@@ -19,13 +19,19 @@ void stopAtDistance(int distance_cm);
 void detectLine();
 
 // Room Functions
+void from1to2();
+void from1to3();
+void from2to1();
+void from2to3();
+void from3to1();
+void from3to2();
+void fromStartto1();
+void fromStartto2();
+void fromStartto3();
 void goToRoom1();
 void goToRoom2();
 void goToRoom3();
-void goToRoom1_2();
-void goToRoom2_3();
-void goToRoom1_2_3();
-
+void goToStart();
 void returnFrom1();
 void returnFrom2();
 void returnFrom3();
