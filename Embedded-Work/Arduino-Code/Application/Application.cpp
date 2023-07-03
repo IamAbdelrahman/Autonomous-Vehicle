@@ -1,6 +1,33 @@
 #include "Arduino.h"
 #include "Application.h"
 
+// Global variables
+char receivedChar ;
+char mode = 'f'; // f > free control - r > room mode
+int positionOfCar = 0;
+
+void setup() {
+  BTSerial.begin(9600);
+  DCMotor_init();
+  Ultrasonic_init();
+  LineTracker_init();
+}
+
+void loop() {
+  if (mode == 'f') {
+    freeControlMode();
+  }
+  else if (mode == 'r') {
+    roomMode();
+  }
+  else if (mode == 'v') {
+    voiceRecognitionMode();
+  }
+  else if (mode == 'o') {
+    ocrMode();
+  }
+}
+
 void freeControlMode () {
   char receivedChar = BTSerial.read();
   switch (receivedChar) {
