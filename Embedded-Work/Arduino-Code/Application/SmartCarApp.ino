@@ -33,18 +33,19 @@ void setup() {
 }
 
 void loop() {
-  if (BTSerial.available()) {
-    char data = BTSerial.read();
     if (mode == 'f') {
       freeControlMode(data);
     }
-    else {
+    else if (mode == 'r') {
       roomMode(data);
     }
+    else if (mode == 'v') {
+      voiceRecognitionMode();
+    }
+    else {
+      ocrMode();
+    }
   }
-}
-
-
 void Ultrasonic_init() {
   Serial.begin(9600);
   pinMode(trigPin, OUTPUT);
@@ -66,7 +67,6 @@ void Display_distance() {
   Serial.print("Distance: ");
   Serial.print(Ultrasonic_read());
   Serial.println(" cm");
-  delay(1000);
 }
 
 void LineTracker_init()
@@ -85,7 +85,6 @@ void Display_lineStatus() {
     Serial.println("LineTracker is on the line");
   else
     Serial.println("Linetracker is not on the line");
-  delay(500);
 }
 
 void DCMotor_init() {
@@ -116,7 +115,7 @@ void DCMotor_forward() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(75);
+  DCMotor_setSpeed(85);
 }
 
 void DCMotor_backward() {
@@ -124,7 +123,7 @@ void DCMotor_backward() {
   digitalWrite(motorPin2, HIGH);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, HIGH);
-  DCMotor_setSpeed(75);
+  DCMotor_setSpeed(135);
 }
 
 void DCMotor_left() {
@@ -132,7 +131,7 @@ void DCMotor_left() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(75);
+  DCMotor_setSpeed(135);
 }
 
 void DCMotor_right() {
@@ -140,7 +139,7 @@ void DCMotor_right() {
   digitalWrite(motorPin2, LOW);
   digitalWrite(motorPin3, HIGH);
   digitalWrite(motorPin4, LOW);
-  DCMotor_setSpeed(75);
+  DCMotor_setSpeed(135);
 }
 
 void DCMotor_turnRight() {
@@ -162,11 +161,11 @@ void DCMotor_turnAround() {
 }
 
 void stopAtDistance(int distance_cm) {
-  int d = -1;
+  int d = 100;
   do {
     d = Ultrasonic_read();
   }
-  while (d > distance_cm);
+  while (d >= distance_cm);
   DCMotor_stop();
 }
 
@@ -181,7 +180,7 @@ void from1to2() {
   DCMotor_turnLeft();
   DCMotor_forward();
   stopAtDistance(5);
- //DCMotor_turnRight();
+  //DCMotor_turnRight();
   //DCMotor_forward();
   //stopAtDistance(10);
 }
@@ -195,10 +194,10 @@ void from2to1() {
   //DCMotor_turnAround();
   DCMotor_turnLeft();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   //DCMotor_turnRight();
   //DCMotor_forward();
   //stopAtDistance(10);
@@ -207,7 +206,7 @@ void from2to1() {
 void from2to3() {
   DCMotor_turnAround();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   //DCMotor_turnLeft();
   //DCMotor_forward();
   //stopAtDistance(10);
@@ -217,8 +216,8 @@ void from3to2 () {
   DCMotor_turnAround();
   //DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
- // DCMotor_turnRight();
+  stopAtDistance(5);
+  // DCMotor_turnRight();
   //DCMotor_forward();
   //stopAtDistance(10);
 }
@@ -230,7 +229,7 @@ void from3to1 () {
 
 void fromStartto1() {
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
 }
 
 void fromStartto2() {
@@ -238,19 +237,19 @@ void fromStartto2() {
   detectLine();
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(20);
+  stopAtDistance(5);
   DCMotor_turnLeft();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
   DCMotor_turnRight();
   DCMotor_forward();
-  stopAtDistance(10);
+  stopAtDistance(5);
 }
 
 /*void fromStartto2() {
   fromStartto1();
   from1to2();
-}
+  }
 */
 void fromStartto3() {
   DCMotor_turnRight();
@@ -258,28 +257,30 @@ void fromStartto3() {
   stopAtDistance(5);
   //DCMotor_turnRight();
   //DCMotor_forward();
-  //stopAtDistance(5); 
+  //stopAtDistance(5);
 }
 
 
 void returnFrom1() {
-  DCMotor_turnAround();
+  //DCMotor_turnAround();
+  DCMotor_turnRight();
+  DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(5);
   DCMotor_turnAround();
 }
 
 void returnFrom2() {
- /* DCMotor_turnRight();
-  DCMotor_forward();
-  detectLine();
-  DCMotor_turnRight();
-  DCMotor_forward();
-  stopAtDistance(10);
-  DCMotor_turnLeft();
-  DCMotor_forward();
-  stopAtDistance(10);
-  DCMotor_turnAround();
+  /* DCMotor_turnRight();
+    DCMotor_forward();
+    detectLine();
+    DCMotor_turnRight();
+    DCMotor_forward();
+    stopAtDistance(10);
+    DCMotor_turnLeft();
+    DCMotor_forward();
+    stopAtDistance(10);
+    DCMotor_turnAround();
   */
 
   from2to1();
@@ -287,10 +288,17 @@ void returnFrom2() {
 }
 
 void returnFrom3() {
-  DCMotor_turnAround();
+  /* DCMotor_turnAround();
+    DCMotor_forward();
+    stopAtDistance(5);
+    DCMotor_turnRight();
+  */
+  DCMotor_turnRight();
   DCMotor_forward();
   stopAtDistance(10);
-  DCMotor_turnRight();  
+  DCMotor_turnLeft();
+  stopAtDistance(10);
+  DCMotor_turnAround();
 }
 
 void goToRoom1() {
@@ -299,17 +307,17 @@ void goToRoom1() {
       fromStartto1();
       positionOfCar = 1;
       break;
-      
+
     case 2: // To go from room 2 to room 1
       from2to1();
       positionOfCar = 1;
       break;
-      
+
     case 3: // To go from room 3 to room 1
       from3to1();
       positionOfCar = 1;
       break;
-      
+
     default:
       break;
   }
@@ -321,17 +329,17 @@ void goToRoom2() {
       fromStartto2();
       positionOfCar = 2;
       break;
-      
+
     case 1: // To go from room 1 to room 2
       from1to2();
       positionOfCar = 2;
       break;
-      
+
     case 3: // To go from room 3 to room 2
       from3to2();
       positionOfCar = 2;
       break;
-      
+
     default:
       break;
   }
@@ -341,14 +349,14 @@ void goToRoom3() {
   switch (positionOfCar) {
     case 0: // To go from start to room 3
       fromStartto3();
-      positionOfCar = 3;     
+      positionOfCar = 3;
       break;
-      
+
     case 1: // To go from room 1 to room 3
       from1to3();
       positionOfCar = 3;
       break;
-      
+
     case 2: // To go from room 2 to room 3
       from2to3();
       positionOfCar = 3;
@@ -361,87 +369,217 @@ void goToStart () {
     case 1:
       returnFrom1();
       break;
+      
     case 2:
       returnFrom2();
       break;
+      
     case 3:
       returnFrom3();
       break;
+      
     default:
       break;
   }
   positionOfCar = 0;
 }
 
-void freeControlMode (char receivedChar) {
+void freeControlMode () {
+  char receivedChar = BTSerial.read();
   switch (receivedChar) {
     case 'w':
-    DCMotor_forward();
-    break;
+      DCMotor_forward();
+      break;
 
     case 's':
-    DCMotor_backward();
-    break;
+      DCMotor_backward();
+      break;
 
     case 'd':
-    DCMotor_turnRight();
-    break;
+      DCMotor_turnRight();
+      break;
 
     case 'a':
-    DCMotor_turnLeft();
-    break;
+      DCMotor_turnLeft();
+      break;
 
     case 'x':
-    DCMotor_stop();
-    break;
+      DCMotor_stop();
+      break;
 
     case '0':
-    positionOfCar = 0;
-    break;
+      positionOfCar = 0;
+      break;
 
     case '1':
-    positionOfCar = 1;
-    break;
+      positionOfCar = 1;
+      break;
 
     case '2':
-    positionOfCar = 2;
-    break;
+      positionOfCar = 2;
+      break;
 
     case '3':
-    positionOfCar = 3;
-    break;
-    
-    case 'r':
-    DCMotor_stop();
-    mode = 'r';
-    BTSerial.write("Welcome to Room-Mode\n");
-    break;
+      positionOfCar = 3;
+      break;
 
-  }   
+    case 'r':
+      DCMotor_stop();
+      mode = 'r';
+      BTSerial.write("Welcome to Room-Mode\n");
+      break;
+      
+    case 'o':
+      DCMotor_stop();
+      mode = 'o';
+      BTSerial.write("Welcome to OCR-Mode\n");
+      break;
+      
+      case 'v':
+      DCMotor_stop();
+      mode = 'v';
+      BTSerial.write("Welcome to Voice-Mode\n");
+      break;
+      
+    case 'S':
+      exit(0);
+      break;
+
+    default:
+      break;
+
+  }
 }
 
-void roomMode (char data) {
+void roomMode () {
+  char data = BTSerial.read();
   switch (data) {
     case '1':
       goToRoom1();
       break;
-      
+
     case '2':
       goToRoom2();
       break;
-      
+
     case '3':
       goToRoom3();
       break;
-      
+
     case '0':
       goToStart();
       break;
-      
+
     case 'f':
-      mode = 'f';   
+      DCMotor_stop();
+      mode = 'f';
+      BTSerial.write("Welcome to Free Control-Mode\n");
+
+    case 'v':
+      DCMotor_stop();
+      mode = 'v';
+      BTSerial.write("Welcome to Voice-Mode\n");
       break;
-      
+
+    case 'o':
+      DCMotor_stop();
+      mode = 'o';
+      BTSerial.write("Welcome to OCR-Mode\n");
+      break;
+
+    case 'S':
+      exit(0);
+      break;
+
+    default:
+      break;
+  }
+  if (BTSerial.available()) {
+    char temp = BTSerial.read();
+  }
+}
+
+void voiceRecognitionMode(char* data) {
+  char* data = BTSerial.read();
+  if (strcmp(data, "Move Forward") == 0) {
+    DCMotor_forward();
+  } else if (strcmp(data, "Move Backward") == 0) {
+    DCMotor_backward();
+  } else if (strcmp(data, "Turn Left") == 0) {
+    DCMotor_turnLeft();
+  } else if (strcmp(data, "Turn Right") == 0) {
+    DCMotor_turnRight();
+  } else if (strcmp(data, "Stop") == 0) {
+    DCMotor_stop();
+  } else if (strcmp(data, "One") == 0) {
+    positionOfCar = 1;
+  } else if (strcmp(data, "Two") == 0) {
+    positionOfCar = 2;
+  } else if (strcmp(data, "Three") == 0) {
+    positionOfCar = 3;
+  } else if (strcmp(data, "Zero") == 0) {
+    positionOfCar = 0;
+  } else if (strcmp(data, "Free Control Mode") == 0) {
+    DCMotor_stop();
+    mode = 'f';
+    BTSerial.write("Welcome to Free Control-Mode\n");
+  } else if (strcmp(data, "Room Mode") == 0) {
+    DCMotor_stop();
+    mode = 'r';
+    BTSerial.write("Welcome to Room-Mode\n");
+  } else if (strcmp(data, "OCR Mode") == 0) {
+    DCMotor_stop();
+    mode = 'o';
+    BTSerial.write("Welcome to OCR-Mode\n");
+  } else if (strcmp(data, "Shut Down") == 0) {
+    exit(0);
+  } else {
+    // Handle unrecognized command
+    Serial.println("Unrecognized command");
+  }
+}
+
+void ocrMode () {
+  char data = BTSerial.read();
+  switch (data) {
+    case '1':
+      goToRoom1();
+      break;
+
+    case '2':
+      goToRoom2();
+      break;
+
+    case '3':
+      goToRoom3();
+      break;
+
+    case '0':
+      goToStart();
+      break;
+
+    case 'f':
+      DCMotor_stop();
+      mode = 'f';
+      BTSerial.write("Welcome to Free Control-Mode\n");
+      break;
+
+    case 'r':
+      DCMotor_stop();
+      mode = 'r';
+      BTSerial.write("Welcome to Room-Mode\n");
+      break;
+
+    case 'v':
+      DCMotor_stop();
+      mode = 'v';
+      BTSerial.write("Welcome to Voice-Mode\n");
+      break;
+
+    case 'S':
+      exit(0);
+      break;
+
     default:
       break;
   }
